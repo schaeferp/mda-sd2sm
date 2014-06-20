@@ -10,9 +10,10 @@
 
 ### Frameworks used
 
-1. [Machine.Specifications](https://github.com/machine/machine.specifications)
-2. Rhino.Mocks / [Machine.Fakes](https://github.com/BjRo/Machine.Fakes)
-3. [CommandLineParser](https://commandline.codeplex.com/)
+1. **Testing:** [Machine.Specifications](https://github.com/machine/machine.specifications)
+2. **Mocking:** Rhino.Mocks / [Machine.Fakes](https://github.com/BjRo/Machine.Fakes)
+3. **CLI:** [CommandLineParser](https://commandline.codeplex.com/)
+4. **IoC:** [Ninject](http://www.codeproject.com/Articles/680159/Implementing-Dependency-Injection-using-Ninject)
 
 ### Before pushing
 
