@@ -13,3 +13,7 @@
 1. [Machine.Specifications](https://github.com/machine/machine.specifications)
 2. Rhino.Mocks / [Machine.Fakes](https://github.com/BjRo/Machine.Fakes)
 3. [CommandLineParser](https://commandline.codeplex.com/)
+
+### Before pushing
+
+Remember to **always** do a R# Code Reformat on **all** files edited prior to pushing! (VS shortcut: Ctrl+E+C).
