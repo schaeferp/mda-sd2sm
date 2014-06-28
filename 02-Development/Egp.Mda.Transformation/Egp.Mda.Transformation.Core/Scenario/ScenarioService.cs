@@ -13,11 +13,12 @@ namespace Egp.Mda.Transformation.Core
         private const string TypeAttributeName = "type";
         private const string NameAttributeName = "name";
         private const string OwnedAttributeTagName = "ownedAttribute";
-        private const string OwnedBehaviorTagName = "ownedBehaviorName";
+        private const string OwnedBehaviorTagName = "ownedBehavior";
         private const string UmlPropertyAttributeValue = "uml:Property";
         private const string UmlInteractionAttributeValue = "uml:Interaction";
         private const string UmlActorAttributeValue = "uml:Actor";
         private const string PackagedElementTagName = "packagedElement";
+        private const string LifelineTagName = "lifeline";
 
         private XName _xmiTypeAttribute;
         private XName _xmiIdAttribute;
@@ -34,7 +35,7 @@ namespace Egp.Mda.Transformation.Core
             _xmiIdAttribute = LookupXName(XmiPrefix, IdAttributeName, document);
             _xmiTypeAttribute = LookupXName(XmiPrefix, TypeAttributeName, document);
             _actors = ReadActors(document);
-            var scenarios = ReadInteractionNodes(document).Select(node => ReadScenario(node)).ToList();
+            var scenarios = ReadInteractionNodes(document).Select(ReadScenario).ToList();
 
             return null;
         }
@@ -43,26 +44,27 @@ namespace Egp.Mda.Transformation.Core
         {
             if (null == node) throw new ArgumentNullException("node");
             var name = node.Attribute(NameAttributeName).Value;
-            var participants = ReadParticipants(node);
+            var participants = FetchParticipantsForDiagram(node);
+
             return null;
         }
 
         /// <summary>
         ///     Reads the participants which are stored in the sequence diagram identified by <paramref name="scenarioNode" />.
         /// </summary>
-        /// <param name="scenarioNode">The XMI representing the sequence diagram.</param>
+        /// <param name="scenarioNode">The XMI representing the sequence diagram to fetch participants from.</param>
         /// <returns>All participants for the given sequence diagram.</returns>
-        private Dictionary<string, IParticipant> ReadParticipants(XElement scenarioNode)
+        private Dictionary<string, IParticipant> FetchParticipantsForDiagram(XElement scenarioNode)
         {
             var ownedAttributeNodes = scenarioNode.Descendants(OwnedAttributeTagName);
-            var lifelineAttributeNodes = ownedAttributeNodes
+            var umlPropertyAttributeNodes = ownedAttributeNodes
                 .Where(
                     ownedAttribute =>
                         ownedAttribute.Attribute(_xmiTypeAttribute) != null &&
                         ownedAttribute.Attribute(_xmiTypeAttribute).Value == UmlPropertyAttributeValue);
             var participants = new Dictionary<string, IParticipant>(_actors);
 
-            foreach (var node in lifelineAttributeNodes)
+            foreach (var node in umlPropertyAttributeNodes)
             {
                 var nodeType = node.Attribute(TypeAttributeName);
                 if (null == nodeType)
@@ -76,6 +78,9 @@ namespace Egp.Mda.Transformation.Core
                     UpdateParticipant(participants, node, nodeType.Value);
                 }
             }
+
+            var lifelineNodes = scenarioNode.Descendants(LifelineTagName);
+            lifelineNodes.ToList().ForEach(node => UpdateParticipant(participants, node, node.Attribute("represents").Value));
             return participants;
         }
 
@@ -100,22 +105,17 @@ namespace Egp.Mda.Transformation.Core
         ///     Determines the actual id of the actor identified by the given <paramref name="oldParticipantId" />, which is valid
         ///     in the current
         ///     sequence diagram. This id will be set in the given <paramref name="participants" /> dict.
-        ///     uml:Model
-        ///     \_packagedElement xmi:type='uml:Actor' xmi:id name
-        ///     \_packagedElement xmi:type='uml:Collaboration'
-        ///     \_ownedBehavior name
-        ///     \_ownedAttribute xmi:id name
         /// </summary>
         /// <param name="participants">The participants to update.</param>
-        /// <param name="ownedAttributeNode">The ownedAttribute participantNode of the current sequence diagram.</param>
+        /// <param name="node">The node to retrieve the new id from.</param>
         /// <param name="oldParticipantId">The id of the participant to update.</param>
-        private void UpdateParticipant(Dictionary<string, IParticipant> participants, XElement ownedAttributeNode,
+        private void UpdateParticipant(Dictionary<string, IParticipant> participants, XElement node,
             string oldParticipantId)
         {
             IParticipant assumedParticipant;
             participants.TryGetValue(oldParticipantId, out assumedParticipant);
             if (null == assumedParticipant) return;
-            var nodeXmiId = ownedAttributeNode.Attribute(_xmiIdAttribute);
+            var nodeXmiId = node.Attribute(_xmiIdAttribute);
             if (null == nodeXmiId) return;
             var newParticipantId = nodeXmiId.Value;
             participants.Remove(oldParticipantId);
