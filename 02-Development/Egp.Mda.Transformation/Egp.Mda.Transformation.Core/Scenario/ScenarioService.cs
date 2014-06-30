@@ -19,9 +19,20 @@ namespace Egp.Mda.Transformation.Core
         private const string UmlActorAttributeValue = "uml:Actor";
         private const string PackagedElementTagName = "packagedElement";
         private const string LifelineTagName = "lifeline";
+        private const string MessageTagName = "message";
+        private const string MessageSortAttributeName = "messageSort";
+        private const string FragmentTagName = "fragment";
+        private const string MessageAttributeName = "message";
+        private const string CoveredTagName = "covered";
+        private const string UmlMessageOccurenceSpecificationAttributeValue =
+            "uml:MessageOccurenceSpecification";
+        private const string UmlStateInvariantAttributeValue = "uml:StateInvariant";
+        private const string IdRefAttributeName = "idref";
+        private const string BodyTagName = "body";
 
         private XName _xmiTypeAttribute;
         private XName _xmiIdAttribute;
+        private XName _xmiIdRefAttribute;
 
         /// <summary>
         ///     Contains a mapping from id to participant. The id matches the
@@ -34,10 +45,9 @@ namespace Egp.Mda.Transformation.Core
             var document = XDocument.Load(xmiStream);
             _xmiIdAttribute = LookupXName(XmiPrefix, IdAttributeName, document);
             _xmiTypeAttribute = LookupXName(XmiPrefix, TypeAttributeName, document);
+            _xmiIdRefAttribute = LookupXName(XmiPrefix, IdRefAttributeName, document);
             _actors = ReadActors(document);
-            var scenarios = ReadInteractionNodes(document).Select(ReadScenario).ToList();
-
-            return null;
+            return ReadInteractionNodes(document).Select(ReadScenario).ToList();
         }
 
         private Scenario ReadScenario(XElement node)
@@ -45,12 +55,83 @@ namespace Egp.Mda.Transformation.Core
             if (null == node) throw new ArgumentNullException("node");
             var name = node.Attribute(NameAttributeName).Value;
             var participants = FetchParticipantsForDiagram(node);
+            var messages = ReadMessages(node);
+            var operationInvocations = FetchOperationInvocations(node, participants, messages);
+            return new Scenario() {Name = name, Invocations = operationInvocations};
+        }
 
-            return null;
+        private IEnumerable<OperationInvocation> FetchOperationInvocations(XElement node, Dictionary<string, IParticipant> participants, IDictionary<string, Operation> messages)
+        {
+            var result = new List<OperationInvocation>();
+            var lastInvocationPerParticipant = new Dictionary<string, OperationInvocation>();
+            var fragments = node.Descendants(FragmentTagName);
+            foreach (var fragment in fragments)
+            {
+                var fragmentType = fragment.Attribute(_xmiTypeAttribute).Value;
+                switch (fragmentType)
+                {
+                    case UmlMessageOccurenceSpecificationAttributeValue:
+                    {
+                        var messageId = fragment.Attribute(MessageAttributeName).Value;
+                        var message = messages[messageId];
+
+                        break;
+                    }
+                    case UmlStateInvariantAttributeValue:
+                    {
+                        var stateName = fragment.Descendants(BodyTagName).First().Value;
+                        var coveredParticipantIds =
+                            fragment.Descendants(CoveredTagName)
+                                .Select(covered => covered.Attribute(_xmiIdRefAttribute).Value);
+                        var stateInvariant = new StateInvariant { Name = stateName };
+                        foreach (var id in coveredParticipantIds)
+                        {
+                            OperationInvocation lastInvocation = null;
+                            lastInvocationPerParticipant.TryGetValue(id, out lastInvocation);
+                            if (null != lastInvocation)
+                            {
+                                lastInvocation.PostStateInvariant = stateInvariant;
+                                lastInvocationPerParticipant.Remove(id);
+                            }
+                            var invocation = new OperationInvocation { PreStateInvariant = stateInvariant };
+                            lastInvocationPerParticipant.Add(id, invocation);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        private IDictionary<string, Operation> ReadMessages(XElement node, Dictionary<string, IParticipant> participants)
+        {
+            if (null == node) throw new ArgumentNullException("node");
+            var messageNodes = node.Descendants(MessageTagName);
+            return messageNodes
+                .Select(
+                    messageNode => new
+                    {
+                        Id = messageNode.Attribute(_xmiIdAttribute).Value,
+                        Operation = new Operation
+                        {
+                            Name = messageNode.Attribute(NameAttributeName).Value,
+                            Receiver = participants[messageNode.Attribute()],
+                            Sort = OperationSortFromXAttribute(messageNode.Attribute(MessageSortAttributeName))
+                        }
+                    })
+                .ToDictionary(key => key.Id, value => value.Operation);
+        }
+
+        private static OperationSort OperationSortFromXAttribute(XAttribute attribute)
+        {
+            if (null == attribute) return OperationSort.Request;
+            return attribute.Value == "reply"
+                ? OperationSort.Reply
+                : OperationSort.Request;
         }
 
         /// <summary>
         ///     Reads the participants which are stored in the sequence diagram identified by <paramref name="scenarioNode" />.
+        ///     All participants included in the result contain their lifeline identifieres as ids.
         /// </summary>
         /// <param name="scenarioNode">The XMI representing the sequence diagram to fetch participants from.</param>
         /// <returns>All participants for the given sequence diagram.</returns>
@@ -80,7 +161,8 @@ namespace Egp.Mda.Transformation.Core
             }
 
             var lifelineNodes = scenarioNode.Descendants(LifelineTagName);
-            lifelineNodes.ToList().ForEach(node => UpdateParticipant(participants, node, node.Attribute("represents").Value));
+            lifelineNodes.ToList()
+                .ForEach(node => UpdateParticipant(participants, node, node.Attribute("represents").Value));
             return participants;
         }
 
