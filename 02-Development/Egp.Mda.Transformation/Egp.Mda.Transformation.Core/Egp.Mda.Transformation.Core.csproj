@@ -44,8 +44,7 @@
     <Compile Include="IOAutomaton\IAutomatonService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenario\IScenarioService.cs" />
-    <Compile Include="Scenario\XMI\XmiScenarioServiceBase.cs" />
-    <Compile Include="Scenario\XMI\MagicDraw\MagicDrawXmiScenarioService.cs" />
+    <Compile Include="Scenario\ScenarioService.cs" />
     <Compile Include="XMI\MagicDrawXmiDeserializer.cs" />
     <Compile Include="XMI\XmiDeserializerBase.cs" />
     <Compile Include="XMI\IXmiDeserializer.cs" />
