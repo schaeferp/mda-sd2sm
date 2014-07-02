@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Egp.Mda.Transformation.Domain.Xmi.SequenceDiagram;
 
 namespace Egp.Mda.Transformation.Core
 {

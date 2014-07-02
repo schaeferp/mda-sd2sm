@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
-using Egp.Mda.Transformation.Core.Domain;
+using Egp.Mda.Transformation.Domain.Scenario;
 
 namespace Egp.Mda.Transformation.Core
 {

@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egp.Mda.Transformation.Core", "Egp.Mda.Transformation.Core\Egp.Mda.Transformation.Core.csproj", "{86C104F7-2F4D-46D0-B36D-0204C0E271E6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B7390486-EE89-48B9-B332-FF607B283A57} = {B7390486-EE89-48B9-B332-FF607B283A57}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egp.Mda.Transformation.App.Cli", "Egp.Mda.Transformation.App.Cli\Egp.Mda.Transformation.App.Cli.csproj", "{5EB4B5EE-35B8-4DD4-9F9D-F929ADFE647A}"
 EndProject

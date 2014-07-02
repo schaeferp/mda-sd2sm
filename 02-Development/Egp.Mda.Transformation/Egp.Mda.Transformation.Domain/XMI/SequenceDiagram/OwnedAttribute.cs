@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Egp.Mda.Transformation.Core
+namespace Egp.Mda.Transformation.Domain.Xmi.SequenceDiagram
 {
     public class OwnedAttribute
     {

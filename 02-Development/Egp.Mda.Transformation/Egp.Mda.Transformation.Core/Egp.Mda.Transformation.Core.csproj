@@ -44,17 +44,10 @@
     <Compile Include="IOAutomaton\IAutomatonService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenario\IScenarioService.cs" />
-    <Compile Include="Domain\Scenario.cs" />
     <Compile Include="Scenario\XMI\XmiScenarioServiceBase.cs" />
     <Compile Include="Scenario\XMI\MagicDraw\MagicDrawXmiScenarioService.cs" />
-    <Compile Include="XMI\Fragment.cs" />
-    <Compile Include="XMI\Lifeline.cs" />
-    <Compile Include="XMI\Message.cs" />
     <Compile Include="XMI\MagicDrawXmiDeserializer.cs" />
     <Compile Include="XMI\XmiDeserializerBase.cs" />
-    <Compile Include="XMI\XmiSequenceDiagramModel.cs" />
-    <Compile Include="XMI\OwnedAttribute.cs" />
-    <Compile Include="XMI\PackagedElement.cs" />
     <Compile Include="XMI\IXmiDeserializer.cs" />
   </ItemGroup>
   <ItemGroup>

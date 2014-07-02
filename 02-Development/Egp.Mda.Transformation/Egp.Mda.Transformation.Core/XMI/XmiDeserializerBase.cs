@@ -1,15 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Xml.Linq;
+using Egp.Mda.Transformation.Domain.Xmi.SequenceDiagram;
 
 namespace Egp.Mda.Transformation.Core
 {
     public abstract class XmiDeserializerBase : IXmiDeserializer
     {
         protected abstract XmiSequenceDiagramModel From(XDocument document);
-
-        
-
 
         /// <summary>
         ///     Resolves the given XMLNS prefix to the full qualified URL and

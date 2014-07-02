@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Egp.Mda.Transformation.Domain.Xmi.SequenceDiagram;
 
 namespace Egp.Mda.Transformation.Core
 {

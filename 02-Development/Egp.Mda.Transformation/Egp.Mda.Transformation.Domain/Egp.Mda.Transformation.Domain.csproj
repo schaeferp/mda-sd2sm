@@ -61,6 +61,12 @@
     <Compile Include="StateMachine\StateMachine.cs" />
     <Compile Include="StateMachine\Transition.cs" />
     <Compile Include="StateMachine\Vertex.cs" />
+    <Compile Include="XMI\SequenceDiagram\Fragment.cs" />
+    <Compile Include="XMI\SequenceDiagram\Lifeline.cs" />
+    <Compile Include="XMI\SequenceDiagram\Message.cs" />
+    <Compile Include="XMI\SequenceDiagram\OwnedAttribute.cs" />
+    <Compile Include="XMI\SequenceDiagram\PackagedElement.cs" />
+    <Compile Include="XMI\SequenceDiagram\XmiSequenceDiagramModel.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
