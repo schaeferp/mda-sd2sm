@@ -40,10 +40,10 @@ namespace Egp.Mda.Transformation.Domain.Uml
     {
         public ActionState()
         {
-            Behavior = new List<Message>();
+            Behavior = new List<MessageTriple>();
         }
 
         public string Constraint { get; set; }
-        public IList<Message> Behavior { get; private set; }
+        public IList<MessageTriple> Behavior { get; private set; }
     }
 }

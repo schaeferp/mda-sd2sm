@@ -39,7 +39,7 @@ namespace Egp.Mda.Transformation.Core.IOAutomaton
             source.Outgoing.Add(new Transition
             {
                 Target = target,
-                InMessage = behavior.InMessage,
+                InMessageTriple = behavior.InMessageTriple,
                 OutMessages = behavior.OutMessages
             });
         }

@@ -8,7 +8,7 @@ namespace Egp.Mda.Transformation.Domain.Behavior
         public string PreState { get; set; }
         public string PostState { get; set; }
 
-        public Message InMessage { get; set; }
-        public IList<Message> OutMessages { get; set; }
+        public MessageTriple InMessageTriple { get; set; }
+        public IList<MessageTriple> OutMessages { get; set; }
     }
 }

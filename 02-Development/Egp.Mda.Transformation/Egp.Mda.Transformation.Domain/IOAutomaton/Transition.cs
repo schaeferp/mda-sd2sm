@@ -7,11 +7,11 @@ namespace Egp.Mda.Transformation.Domain.IOAutomaton
     {
         public Transition()
         {
-            OutMessages = new List<Message>();
+            OutMessages = new List<MessageTriple>();
         }
 
         public State Target { get; set; }
-        public Message InMessage { get; set; }
-        public IList<Message> OutMessages { get; set; }
+        public MessageTriple InMessageTriple { get; set; }
+        public IList<MessageTriple> OutMessages { get; set; }
     }
 }

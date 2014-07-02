@@ -32,7 +32,7 @@ namespace Egp.Mda.Transformation.Core.StateMachine
         private void TransformTransition(Transition transition, Vertex source, Region region)
         {
             bool created;
-            string activityStateName = ": " + transition.InMessage.Operation;
+            string activityStateName = ": " + transition.InMessageTriple.Operation;
             var activityState = region.GetOrCreateActivityState(activityStateName, out created);
 
             if (created)
@@ -40,7 +40,7 @@ namespace Egp.Mda.Transformation.Core.StateMachine
                 source.Outgoing.Add(new Domain.Uml.Transition
                 {
                     Target = activityState,
-                    Action = transition.InMessage.Operation,
+                    Action = transition.InMessageTriple.Operation,
                     Return = ""
                 });
 
@@ -49,13 +49,13 @@ namespace Egp.Mda.Transformation.Core.StateMachine
 
             activityState.Outgoing.Add(new Domain.Uml.Transition
             {
-                Target = region.GetOrCreateStableState(transition.InMessage.Target.Name),
+                Target = region.GetOrCreateStableState(transition.InMessageTriple.Target.Name),
                 Action = "",
-                Return = transition.InMessage.Return
+                Return = transition.InMessageTriple.Return
             });
         }
 
-        private void InitializeSubStateMachine(IEnumerable<Message> transition, Vertex parent)
+        private void InitializeSubStateMachine(IEnumerable<MessageTriple> transition, Vertex parent)
         {
             
         }
