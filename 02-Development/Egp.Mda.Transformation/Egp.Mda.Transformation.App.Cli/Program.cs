@@ -3,9 +3,9 @@ using Egp.Mda.Transformation.Core;
 
 namespace Egp.Mda.Transformation.App.Cli
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var file = args[0];
             var stream = File.OpenRead(file);

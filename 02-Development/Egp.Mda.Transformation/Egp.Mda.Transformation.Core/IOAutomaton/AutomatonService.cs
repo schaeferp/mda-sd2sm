@@ -20,7 +20,7 @@ namespace Egp.Mda.Transformation.Core.IOAutomaton
 
             if (context.Scenarios.Count > 0)
             {
-                string initialStateName = context.Scenarios[0].Behaviors[0].PreState;
+                var initialStateName = context.Scenarios[0].Behaviors[0].PreState;
                 automaton.InitialState = getOrCreateState(initialStateName, states);
                 context.Scenarios.ForEach(s => TransformScenario(s, states));
             }
@@ -35,8 +35,8 @@ namespace Egp.Mda.Transformation.Core.IOAutomaton
 
         private void AddTransition(Behavior behavior, IDictionary<string, State> states)
         {
-            State source = getOrCreateState(behavior.PreState, states);
-            State target = getOrCreateState(behavior.PostState, states);
+            var source = getOrCreateState(behavior.PreState, states);
+            var target = getOrCreateState(behavior.PostState, states);
 
             source.Outgoing.Add(new Transition
             {

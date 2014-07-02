@@ -41,7 +41,8 @@ namespace Egp.Mda.Transformation.Core
             {
                 switch (fragment.XmiType)
                 {
-                    case UmlStateInvariantAttributeValue: AddStateInvariantToInvocations(fragment, sequenceDiagram, lastInvocationPerParticipant);
+                    case UmlStateInvariantAttributeValue:
+                        AddStateInvariantToInvocations(fragment, sequenceDiagram, lastInvocationPerParticipant);
                         break;
                     case UmlMessageOccurenceSpecificationAttributeValue:
                     {
@@ -55,7 +56,8 @@ namespace Egp.Mda.Transformation.Core
             return scenario;
         }
 
-        private void AddMessageToInvocations(Fragment fragment, PackagedElement sequenceDiagram, Dictionary<IParticipant, OperationInvocation> lastInvocationPerParticipant, Scenario scenario)
+        private void AddMessageToInvocations(Fragment fragment, PackagedElement sequenceDiagram,
+            Dictionary<IParticipant, OperationInvocation> lastInvocationPerParticipant, Scenario scenario)
         {
             var message = LookupMessageFor(sequenceDiagram, fragment.Message);
             var participantIsSender = message.SendEvent == fragment.XmiId;
@@ -69,7 +71,8 @@ namespace Egp.Mda.Transformation.Core
                 var lastInvocationExists = lastInvocationPerParticipant.TryGetValue(participant, out lastInvocation);
                 if (lastInvocationExists)
                 {
-                    UpdateCurrentParticipantInvocation(message, lastInvocationPerParticipant, participant,lastInvocation, scenario);
+                    UpdateCurrentParticipantInvocation(message, lastInvocationPerParticipant, participant,
+                        lastInvocation, scenario);
                 }
                 else
                 {
@@ -78,7 +81,9 @@ namespace Egp.Mda.Transformation.Core
             }
         }
 
-        private void UpdateCurrentParticipantInvocation(Message message, Dictionary<IParticipant, OperationInvocation> lastInvocationPerParticipant, IParticipant participant, OperationInvocation lastInvocation, Scenario scenario)
+        private void UpdateCurrentParticipantInvocation(Message message,
+            Dictionary<IParticipant, OperationInvocation> lastInvocationPerParticipant, IParticipant participant,
+            OperationInvocation lastInvocation, Scenario scenario)
         {
             var state = StateInvariant.CreateAnonymous();
             var lastInvocationHasOperation = lastInvocation.Operation != null;
@@ -109,7 +114,9 @@ namespace Egp.Mda.Transformation.Core
             }
         }
 
-        private void CreateCurrentParticipantInvocation(Message message, Dictionary<IParticipant, OperationInvocation> lastInvocationPerParticipant, IParticipant participant, Scenario scenario)
+        private void CreateCurrentParticipantInvocation(Message message,
+            Dictionary<IParticipant, OperationInvocation> lastInvocationPerParticipant, IParticipant participant,
+            Scenario scenario)
         {
             var preState = StateInvariant.CreateAnonymous();
             var operation = new Operation()
@@ -126,9 +133,10 @@ namespace Egp.Mda.Transformation.Core
             scenario.Invocations.Add(invocation);
         }
 
-        private void AddStateInvariantToInvocations(Fragment fragment, PackagedElement sequenceDiagram, Dictionary<IParticipant, OperationInvocation> lastInvocationPerParticipant)
+        private void AddStateInvariantToInvocations(Fragment fragment, PackagedElement sequenceDiagram,
+            Dictionary<IParticipant, OperationInvocation> lastInvocationPerParticipant)
         {
-            var state = new StateInvariant() { Name = fragment.Body };
+            var state = new StateInvariant() {Name = fragment.Body};
             foreach (var lifelineId in fragment.Covered)
             {
                 var lifeline = LookupLifelineFor(sequenceDiagram, lifelineId);
@@ -137,7 +145,7 @@ namespace Egp.Mda.Transformation.Core
                 var activeInvocationExists = lastInvocationPerParticipant.TryGetValue(participant,
                     out activeInvocation);
                 if (activeInvocationExists) activeInvocation.PostStateInvariant = state;
-                var newInvocation = new OperationInvocation() { PreStateInvariant = state };
+                var newInvocation = new OperationInvocation() {PreStateInvariant = state};
                 lastInvocationPerParticipant.Remove(participant);
                 lastInvocationPerParticipant.Add(participant, newInvocation);
             }
