@@ -9,10 +9,10 @@ namespace Egp.Mda.Transformation.App.Cli
         {
             var file = args[0];
             var stream = File.OpenRead(file);
-            //var scnSvc = new MagicDrawXmiScenarioService();
-            //var x = scnSvc.From(stream);
-            var bla = new MagicDrawXmiDeserializer();
-            var blub = bla.From(stream);
+            var xmiDeserializer = new MagicDrawXmiDeserializer();
+            var xmiModel = xmiDeserializer.From(stream);
+            var scenarioService = new ScenarioService();
+            var scenarios = scenarioService.From(xmiModel);
         }
     }
 }
