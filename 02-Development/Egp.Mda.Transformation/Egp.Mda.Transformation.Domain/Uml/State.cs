@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Egp.Mda.Transformation.Domain.Common;
 
-namespace Egp.Mda.Transformation.Domain.StateMachine
+namespace Egp.Mda.Transformation.Domain.Uml
 {
     public class State : Vertex
     {
@@ -8,6 +9,11 @@ namespace Egp.Mda.Transformation.Domain.StateMachine
 
     public class StableState : State
     {
+        public StableState(string name)
+        {
+            Name = name;
+        }
+
         public string Name { get; set; }
     }
 
@@ -21,16 +27,23 @@ namespace Egp.Mda.Transformation.Domain.StateMachine
 
         public string Name { get; set; }
         public IList<Region> Regions { get; private set; }
+
+        public Region CreateRegion()
+        {
+            var region = new Region(this);
+            Regions.Add(region);
+            return region;
+        }
     }
 
     public class ActionState : State
     {
         public ActionState()
         {
-            Behavior = new List<Call>();
+            Behavior = new List<Message>();
         }
 
         public string Constraint { get; set; }
-        public IList<Call> Behavior { get; private set; }
+        public IList<Message> Behavior { get; private set; }
     }
 }

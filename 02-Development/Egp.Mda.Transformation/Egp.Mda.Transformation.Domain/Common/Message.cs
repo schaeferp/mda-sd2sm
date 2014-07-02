@@ -1,6 +1,4 @@
-﻿using Egp.Mda.Transformation.Domain.Common;
-
-namespace Egp.Mda.Transformation.Domain.Behavior
+﻿namespace Egp.Mda.Transformation.Domain.Common
 {
     public class Message
     {
