@@ -6,6 +6,14 @@ using System.Xml.Linq;
 
 namespace Egp.Mda.Transformation.Core
 {
+    class Message
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string ReceiveEvent { get; set; }
+        public string SendEvent { get; set; }
+        public string Sort { get; set; }
+    }
     public class ScenarioServiceBase : XmiScenarioServiceBase
     {
         private const string XmiPrefix = "xmi";
@@ -29,7 +37,8 @@ namespace Egp.Mda.Transformation.Core
         private const string UmlStateInvariantAttributeValue = "uml:StateInvariant";
         private const string IdRefAttributeName = "idref";
         private const string BodyTagName = "body";
-
+        private const string ReceiveEventAttributeName = "receiveEvent";
+        private const string SendEventAttributeName = "sendEvent";
         private XName _xmiTypeAttribute;
         private XName _xmiIdAttribute;
         private XName _xmiIdRefAttribute;
@@ -112,10 +121,11 @@ namespace Egp.Mda.Transformation.Core
                     messageNode => new
                     {
                         Id = messageNode.Attribute(_xmiIdAttribute).Value,
-                        Operation = new Operation
+                        Message = new Message
                         {
                             Name = messageNode.Attribute(NameAttributeName).Value,
-                            Receiver = participants[messageNode.Attribute()],
+                            ReceiveEvent = messageNode.Attribute(ReceiveEventAttributeName).Value,
+                            SendEvent = messageNode.Attribute(SendEventAttributeName).Value,
                             Sort = OperationSortFromXAttribute(messageNode.Attribute(MessageSortAttributeName))
                         }
                     })
