@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace Egp.Mda.Transformation.Core
 {
-    public class ScenarioService : IScenarioService
+    public class ScenarioServiceBase : XmiScenarioServiceBase
     {
         private const string XmiPrefix = "xmi";
         private const string IdAttributeName = "id";
@@ -40,9 +40,8 @@ namespace Egp.Mda.Transformation.Core
         /// </summary>
         private Dictionary<string, IParticipant> _actors;
 
-        public IEnumerable<Scenario> From(Stream xmiStream)
+        protected override IEnumerable<Domain.Scenario> From(XDocument document)
         {
-            var document = XDocument.Load(xmiStream);
             _xmiIdAttribute = LookupXName(XmiPrefix, IdAttributeName, document);
             _xmiTypeAttribute = LookupXName(XmiPrefix, TypeAttributeName, document);
             _xmiIdRefAttribute = LookupXName(XmiPrefix, IdRefAttributeName, document);
@@ -50,14 +49,14 @@ namespace Egp.Mda.Transformation.Core
             return ReadInteractionNodes(document).Select(ReadScenario).ToList();
         }
 
-        private Scenario ReadScenario(XElement node)
+        private Domain.Scenario ReadScenario(XElement node)
         {
             if (null == node) throw new ArgumentNullException("node");
             var name = node.Attribute(NameAttributeName).Value;
             var participants = FetchParticipantsForDiagram(node);
-            var messages = ReadMessages(node);
+            var messages = ReadMessages(node, participants);
             var operationInvocations = FetchOperationInvocations(node, participants, messages);
-            return new Scenario() {Name = name, Invocations = operationInvocations};
+            return new Domain.Scenario() {Name = name, Invocations = operationInvocations};
         }
 
         private IEnumerable<OperationInvocation> FetchOperationInvocations(XElement node, Dictionary<string, IParticipant> participants, IDictionary<string, Operation> messages)
@@ -100,6 +99,8 @@ namespace Egp.Mda.Transformation.Core
                     }
                 }
             }
+
+            return null;
         }
 
         private IDictionary<string, Operation> ReadMessages(XElement node, Dictionary<string, IParticipant> participants)
@@ -249,21 +250,6 @@ namespace Egp.Mda.Transformation.Core
                 .ToDictionary(key => key.Id, val => val.Actor);
         }
 
-        /// <summary>
-        ///     Resolves the given XMLNS prefix to the full qualified URL and
-        ///     returns an <see cref="XName" /> including the required attribute.
-        /// </summary>
-        /// <param name="prefix">XMLNS prefix.</param>
-        /// <param name="attribute">XML attribute name.</param>
-        /// <param name="document">XMI document.</param>
-        /// <returns>XName including resolved XMLNS.</returns>
-        private XName LookupXName(string prefix, string attribute, XDocument document)
-        {
-            if (document.Root == null) throw new ArgumentNullException();
-            var namespaceOfPrefix = document.Root.GetNamespaceOfPrefix(prefix);
-            if (namespaceOfPrefix == null) throw new ArgumentNullException();
-            var ns = namespaceOfPrefix.ToString();
-            return XName.Get(attribute, ns);
-        }
+
     }
 }
