@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Egp.Mda.Transformation.Domain.Behavior
 {
@@ -12,6 +8,6 @@ namespace Egp.Mda.Transformation.Domain.Behavior
         public string PostState { get; set; }
 
         public Message InMessage { get; set; }
-        public IList<Message> OutMessages { get; set; } 
+        public IList<Message> OutMessages { get; set; }
     }
 }

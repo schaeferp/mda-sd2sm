@@ -39,9 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IOAutomaton\IEnumerableExtensions.cs" />
+    <Compile Include="IOAutomaton\AutomatonService.cs" />
+    <Compile Include="IOAutomaton\IAutomatonService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenario\IScenarioService.cs" />
-    <Compile Include="Scenario\Scenario.cs" />
     <Compile Include="Scenario\ScenarioService.cs" />
   </ItemGroup>
   <ItemGroup>
