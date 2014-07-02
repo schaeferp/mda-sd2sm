@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{86C104F7-2F4D-46D0-B36D-0204C0E271E6}</ProjectGuid>
+    <ProjectGuid>{B7390486-EE89-48B9-B332-FF607B283A57}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Egp.Mda.Transformation.Core</RootNamespace>
-    <AssemblyName>Egp.Mda.Transformation.Core</AssemblyName>
+    <RootNamespace>Egp.Mda.Transformation.Domain</RootNamespace>
+    <AssemblyName>Egp.Mda.Transformation.Domain</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,33 +39,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IOAutomaton\IEnumerableExtensions.cs" />
-    <Compile Include="IOAutomaton\AutomatonService.cs" />
-    <Compile Include="IOAutomaton\IAutomatonService.cs" />
+    <Compile Include="Behavior\Behavior.cs" />
+    <Compile Include="Behavior\Message.cs" />
+    <Compile Include="Behavior\Context.cs" />
+    <Compile Include="Behavior\Scenario.cs" />
+    <Compile Include="IOAutomaton\Automaton.cs" />
+    <Compile Include="IOAutomaton\Message.cs" />
+    <Compile Include="IOAutomaton\State.cs" />
+    <Compile Include="IOAutomaton\Transition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scenario\IScenarioService.cs" />
-    <Compile Include="Domain\Scenario.cs" />
-    <Compile Include="Scenario\XMI\XmiScenarioServiceBase.cs" />
-    <Compile Include="Scenario\XMI\MagicDraw\MagicDrawXmiScenarioService.cs" />
-    <Compile Include="XMI\Fragment.cs" />
-    <Compile Include="XMI\Lifeline.cs" />
-    <Compile Include="XMI\Message.cs" />
-    <Compile Include="XMI\MagicDrawXmiDeserializer.cs" />
-    <Compile Include="XMI\XmiDeserializerBase.cs" />
-    <Compile Include="XMI\XmiSequenceDiagramModel.cs" />
-    <Compile Include="XMI\OwnedAttribute.cs" />
-    <Compile Include="XMI\PackagedElement.cs" />
-    <Compile Include="XMI\IXmiDeserializer.cs" />
+    <Compile Include="Scenario\Operation.cs" />
+    <Compile Include="Scenario\OperationInvocation.cs" />
+    <Compile Include="Common\Participant.cs" />
+    <Compile Include="Scenario\ReturnType.cs" />
+    <Compile Include="Scenario\Scenario.cs" />
+    <Compile Include="Scenario\StateInvariant.cs" />
+    <Compile Include="StateMachine\Call.cs" />
+    <Compile Include="StateMachine\PseudoState.cs" />
+    <Compile Include="StateMachine\Region.cs" />
+    <Compile Include="StateMachine\State.cs" />
+    <Compile Include="StateMachine\StateMachine.cs" />
+    <Compile Include="StateMachine\Transition.cs" />
+    <Compile Include="StateMachine\Vertex.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="StateMachine\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Egp.Mda.Transformation.Domain\Egp.Mda.Transformation.Domain.csproj">
-      <Project>{b7390486-ee89-48b9-b332-ff607b283a57}</Project>
-      <Name>Egp.Mda.Transformation.Domain</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

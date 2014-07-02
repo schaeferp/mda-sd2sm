@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egp.Mda.Transformation.Core", "Egp.Mda.Transformation.Core\Egp.Mda.Transformation.Core.csproj", "{86C104F7-2F4D-46D0-B36D-0204C0E271E6}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egp.Mda.Transformation.Core.Specs", "Egp.Mda.Transformation.Core.Specs\Egp.Mda.Transformation.Core.Specs.csproj", "{DB4680ED-7FBF-4922-B73B-0700E5B57B38}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egp.Mda.Transformation.App.Cli.Specs", "Egp.Mda.Transformation.App.Cli.Specs\Egp.Mda.Transformation.App.Cli.Specs.csproj", "{2CB767CE-E29C-4C68-8FCC-4DFA58D95307}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egp.Mda.Transformation.Domain", "Egp.Mda.Transformation.Domain\Egp.Mda.Transformation.Domain.csproj", "{B7390486-EE89-48B9-B332-FF607B283A57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{2CB767CE-E29C-4C68-8FCC-4DFA58D95307}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CB767CE-E29C-4C68-8FCC-4DFA58D95307}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CB767CE-E29C-4C68-8FCC-4DFA58D95307}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7390486-EE89-48B9-B332-FF607B283A57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7390486-EE89-48B9-B332-FF607B283A57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7390486-EE89-48B9-B332-FF607B283A57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7390486-EE89-48B9-B332-FF607B283A57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

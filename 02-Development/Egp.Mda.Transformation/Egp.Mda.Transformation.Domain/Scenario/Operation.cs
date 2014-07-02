@@ -1,4 +1,6 @@
-﻿namespace Egp.Mda.Transformation.Core
+﻿using Egp.Mda.Transformation.Domain.Common;
+
+namespace Egp.Mda.Transformation.Domain.Scenario
 {
     public enum OperationKind
     {
