@@ -7,6 +7,6 @@ namespace Egp.Mda.Transformation.Domain.Behavior
     {
         public IParticipant Participant { get; set; }
     
-        public IEnumerable<Behavior> Behaviors { get; set; }
+        public IList<Behavior> Behaviors { get; set; }
     }
 }

@@ -4,6 +4,6 @@ namespace Egp.Mda.Transformation.Domain.StateMachine
 {
     public abstract class Vertex
     {
-        public IEnumerable<Transition> Outgoing { get; protected set; }
+        public IList<Transition> Outgoing { get; protected set; }
     }
 }

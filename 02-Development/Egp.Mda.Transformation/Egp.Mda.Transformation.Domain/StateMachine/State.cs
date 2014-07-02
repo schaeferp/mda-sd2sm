@@ -20,7 +20,7 @@ namespace Egp.Mda.Transformation.Domain.StateMachine
         }
 
         public string Name { get; set; }
-        public IEnumerable<Region> Regions { get; private set; }
+        public IList<Region> Regions { get; private set; }
     }
 
     public class ActionState : State
@@ -31,6 +31,6 @@ namespace Egp.Mda.Transformation.Domain.StateMachine
         }
 
         public string Constraint { get; set; }
-        public IEnumerable<Call> Behavior { get; private set; }
+        public IList<Call> Behavior { get; private set; }
     }
 }

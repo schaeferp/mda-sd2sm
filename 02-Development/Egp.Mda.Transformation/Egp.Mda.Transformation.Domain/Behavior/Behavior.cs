@@ -12,6 +12,6 @@ namespace Egp.Mda.Transformation.Domain.Behavior
         public string PostState { get; set; }
 
         public Message InMessage { get; set; }
-        public IEnumerable<Message> OutMessages { get; set; } 
+        public IList<Message> OutMessages { get; set; } 
     }
 }

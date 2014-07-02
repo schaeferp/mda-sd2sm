@@ -4,7 +4,7 @@ namespace Egp.Mda.Transformation.Domain.StateMachine
 {
     public interface IRegionOwner
     {
-        IEnumerable<Region> Regions { get; }
+        IList<Region> Regions { get; }
     }
 
     public class Region
@@ -16,6 +16,6 @@ namespace Egp.Mda.Transformation.Domain.StateMachine
         }
 
         private IRegionOwner Owner { get; set; }
-        public IEnumerable<Vertex> Vertices { get; private set; }
+        public IList<Vertex> Vertices { get; private set; }
     }
 }

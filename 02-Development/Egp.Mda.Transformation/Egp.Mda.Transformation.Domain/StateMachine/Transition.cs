@@ -15,6 +15,6 @@ namespace Egp.Mda.Transformation.Domain.StateMachine
         public Vertex Source { get; set; }
         public Vertex Target { get; set; }
         public string Constraint { get; set; }
-        public IEnumerable<Call> Behavior { get; private set; }
+        public IList<Call> Behavior { get; private set; }
     }
 }

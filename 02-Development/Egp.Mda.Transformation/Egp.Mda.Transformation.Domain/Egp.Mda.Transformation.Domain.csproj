@@ -39,18 +39,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behavior\Behavior.cs" />
+    <Compile Include="Behavior\Message.cs" />
+    <Compile Include="Behavior\Scenario.cs" />
+    <Compile Include="IOAutomaton\Automaton.cs" />
+    <Compile Include="IOAutomaton\Message.cs" />
+    <Compile Include="IOAutomaton\State.cs" />
+    <Compile Include="IOAutomaton\Transition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Common\Operation.cs" />
+    <Compile Include="Scenario\Operation.cs" />
     <Compile Include="Scenario\OperationInvocation.cs" />
     <Compile Include="Common\Participant.cs" />
-    <Compile Include="Common\ReturnType.cs" />
+    <Compile Include="Scenario\ReturnType.cs" />
+    <Compile Include="Scenario\Scenario.cs" />
     <Compile Include="Scenario\StateInvariant.cs" />
+    <Compile Include="StateMachine\Call.cs" />
+    <Compile Include="StateMachine\PseudoState.cs" />
+    <Compile Include="StateMachine\Region.cs" />
+    <Compile Include="StateMachine\State.cs" />
+    <Compile Include="StateMachine\StateMachine.cs" />
+    <Compile Include="StateMachine\Transition.cs" />
+    <Compile Include="StateMachine\Vertex.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="StateMachine\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

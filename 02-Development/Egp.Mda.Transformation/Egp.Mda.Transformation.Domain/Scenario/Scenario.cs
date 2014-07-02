@@ -6,6 +6,6 @@ namespace Egp.Mda.Transformation.Domain.Scenario
     {
         public string Name { get; set; }
 
-        public IEnumerable<OperationInvocation> Invocations { get; set; }
+        public IList<OperationInvocation> Invocations { get; set; }
     }
 }

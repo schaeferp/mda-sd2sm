@@ -9,6 +9,6 @@ namespace Egp.Mda.Transformation.Domain.StateMachine
             Regions = new List<Region>();
         }
 
-        public IEnumerable<Region> Regions { get; private set; }
+        public IList<Region> Regions { get; private set; }
     }
 }
