@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Egp.Mda.Transformation.Domain.StateMachine
+namespace Egp.Mda.Transformation.Domain.Uml
 {
     public class StateMachine : IRegionOwner
     {
@@ -10,5 +10,12 @@ namespace Egp.Mda.Transformation.Domain.StateMachine
         }
 
         public IList<Region> Regions { get; private set; }
+
+        public Region CreateRegion()
+        {
+            var region = new Region(this);
+            Regions.Add(region);
+            return region;
+        }
     }
 }

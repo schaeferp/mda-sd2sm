@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Egp.Mda.Transformation.Domain.StateMachine
+namespace Egp.Mda.Transformation.Domain.Uml
 {
     public abstract class Vertex
     {

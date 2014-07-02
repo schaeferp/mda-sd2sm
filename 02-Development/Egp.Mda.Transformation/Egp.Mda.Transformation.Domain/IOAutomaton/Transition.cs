@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Egp.Mda.Transformation.Domain.Common;
 
 namespace Egp.Mda.Transformation.Domain.IOAutomaton
 {

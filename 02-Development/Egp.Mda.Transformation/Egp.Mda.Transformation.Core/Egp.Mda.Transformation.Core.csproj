@@ -47,11 +47,11 @@
     <Compile Include="Scenario\ScenarioService.cs" />
     <Compile Include="XMI\MagicDrawXmiDeserializer.cs" />
     <Compile Include="XMI\XmiDeserializerBase.cs" />
+    <Compile Include="StateMachine\IStateMachineService.cs" />
+    <Compile Include="StateMachine\StateMachineService.cs" />
     <Compile Include="XMI\IXmiDeserializer.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="StateMachine\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Egp.Mda.Transformation.Domain\Egp.Mda.Transformation.Domain.csproj">
       <Project>{b7390486-ee89-48b9-b332-ff607b283a57}</Project>
