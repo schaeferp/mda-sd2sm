@@ -2,8 +2,8 @@
 {
     public class Call
     {
-        public string Context { get; set; }
+        public string Target { get; set; }
         public string Operation { get; set; }
-        public string ReturnType { get; set; }
+        public string Return { get; set; }
     }
 }
