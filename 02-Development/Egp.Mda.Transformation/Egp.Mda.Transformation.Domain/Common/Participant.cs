@@ -1,4 +1,4 @@
-﻿namespace Egp.Mda.Transformation.Core
+﻿namespace Egp.Mda.Transformation.Domain.Common
 {
     public interface IParticipant
     {

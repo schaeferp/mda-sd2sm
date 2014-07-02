@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Egp.Mda.Transformation.Domain.Common;
+using Egp.Mda.Transformation.Domain.Scenario;
 
 namespace Egp.Mda.Transformation.Core
 {

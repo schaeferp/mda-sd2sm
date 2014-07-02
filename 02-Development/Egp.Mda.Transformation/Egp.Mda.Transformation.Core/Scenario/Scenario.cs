@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Egp.Mda.Transformation.Domain.Scenario;
 
 namespace Egp.Mda.Transformation.Core
 {
