@@ -6,6 +6,6 @@ namespace Egp.Mda.Transformation.Core.IOAutomaton
 {
     public interface IAutomatonService
     {
-        IEnumerable<Automaton> From(IEnumerable<Context> scenarios);
+        IEnumerable<Automaton> From(IEnumerable<Context> contexts);
     }
 }
