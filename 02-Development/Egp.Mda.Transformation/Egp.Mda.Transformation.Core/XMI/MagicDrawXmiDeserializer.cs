@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using Egp.Mda.Transformation.Domain.Xmi.SequenceDiagram;
@@ -14,10 +13,6 @@ namespace Egp.Mda.Transformation.Core
         private const string TypeAttributeName = "type";
         private const string NameAttributeName = "name";
         private const string OwnedAttributeTagName = "ownedAttribute";
-        private const string OwnedBehaviorTagName = "ownedBehavior";
-        private const string UmlPropertyAttributeValue = "uml:Property";
-        private const string UmlInteractionAttributeValue = "uml:Interaction";
-        private const string UmlActorAttributeValue = "uml:Actor";
         private const string PackagedElementTagName = "packagedElement";
         private const string LifelineTagName = "lifeline";
         private const string MessageTagName = "message";
@@ -25,15 +20,8 @@ namespace Egp.Mda.Transformation.Core
         private const string FragmentTagName = "fragment";
         private const string MessageAttributeName = "message";
         private const string CoveredTagName = "covered";
-        private const string RequestSortValue = "request";
-        private const string ReplySortValue = "reply";
         private const string RepresentsAttributeName = "represents";
         private const string ModelTagName = "Model";
-
-        private const string UmlMessageOccurenceSpecificationAttributeValue =
-            "uml:MessageOccurrenceSpecification";
-
-        private const string UmlStateInvariantAttributeValue = "uml:StateInvariant";
         private const string IdRefAttributeName = "idref";
         private const string BodyTagName = "body";
         private const string ReceiveEventAttributeName = "receiveEvent";
@@ -70,13 +58,14 @@ namespace Egp.Mda.Transformation.Core
         private IDictionary<string, Message> FetchMessagesFor(XElement xElement)
         {
             var xMessages = xElement.Descendants(MessageTagName);
-            return xMessages.Select(xMessage => new Message()
+            return xMessages.Select(xMessage => new Message
             {
                 XmiId = xMessage.Attribute(_xmiIdAttribute).Value,
                 Name = ValueOrDefault(xMessage.Attribute(NameAttributeName)),
                 XmiType = xMessage.Attribute(_xmiTypeAttribute).Value,
                 ReceiveEvent = xMessage.Attribute(ReceiveEventAttributeName).Value,
-                SendEvent = xMessage.Attribute(SendEventAttributeName).Value
+                SendEvent = xMessage.Attribute(SendEventAttributeName).Value,
+                Sort = ValueOrDefault(xMessage.Attribute(MessageSortAttributeName))
             }).ToDictionary(ownedAttribute => ownedAttribute.XmiId);
         }
 
@@ -86,10 +75,12 @@ namespace Egp.Mda.Transformation.Core
             var xFragments = xElement.Descendants(FragmentTagName);
             foreach (var xFragment in xFragments)
             {
-                var fragment = new Fragment()
+                var fragment = new Fragment
                 {
                     XmiId = xFragment.Attribute(_xmiIdAttribute).Value,
-                    XmiType = xFragment.Attribute(_xmiTypeAttribute).Value
+                    XmiType = xFragment.Attribute(_xmiTypeAttribute).Value,
+                    Body = ValueOrDefault(xFragment.Descendants(BodyTagName).FirstOrDefault()),
+                    Message = ValueOrDefault(xFragment.Attribute(MessageAttributeName))
                 };
                 var xCovereds = xFragment.Descendants(CoveredTagName);
                 foreach (var xCovered in xCovereds) fragment.Covered.Add(xCovered.Attribute(_xmiIdRefAttribute).Value);
@@ -101,7 +92,7 @@ namespace Egp.Mda.Transformation.Core
         private IDictionary<string, OwnedAttribute> FetchOwnedAttributesFor(XElement xElement)
         {
             var xOwnedAttributes = xElement.Descendants(OwnedAttributeTagName);
-            return xOwnedAttributes.Select(xOwnedAttribute => new OwnedAttribute()
+            return xOwnedAttributes.Select(xOwnedAttribute => new OwnedAttribute
             {
                 XmiId = ValueOrDefault(xOwnedAttribute.Attribute(_xmiIdAttribute)),
                 Name = ValueOrDefault(xOwnedAttribute.Attribute(NameAttributeName)),
@@ -113,7 +104,7 @@ namespace Egp.Mda.Transformation.Core
         private IDictionary<string, Lifeline> FetchLifelinesFor(XElement xElement)
         {
             var xLifelines = xElement.Descendants(LifelineTagName);
-            return xLifelines.Select(xLifeline => new Lifeline()
+            return xLifelines.Select(xLifeline => new Lifeline
             {
                 XmiId = xLifeline.Attribute(_xmiIdAttribute).Value,
                 XmiType = xLifeline.Attribute(_xmiTypeAttribute).Value,
@@ -134,6 +125,13 @@ namespace Egp.Mda.Transformation.Core
             return null == attribute
                 ? defaultVal
                 : attribute.Value;
+        }
+
+        private static string ValueOrDefault(XElement element, string defaultVal = "")
+        {
+            return null == element
+                ? defaultVal
+                : element.Value;
         }
     }
 }
