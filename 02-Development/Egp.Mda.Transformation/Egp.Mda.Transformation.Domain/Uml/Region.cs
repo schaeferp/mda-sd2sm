@@ -43,5 +43,10 @@ namespace Egp.Mda.Transformation.Domain.Uml
             created = true;
             return vertices[name] = new ActivityState(name);
         }
+
+        public void AddVertex(PseudoState initial)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
