@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Xml;
 using Egp.Mda.Transformation.Core;
 
 namespace Egp.Mda.Transformation.App.Cli
@@ -10,8 +9,10 @@ namespace Egp.Mda.Transformation.App.Cli
         {
             var file = args[0];
             var stream = File.OpenRead(file);
-            var scnSvc = new ScenarioService();
-            var x = scnSvc.From(stream);
+            //var scnSvc = new MagicDrawXmiScenarioService();
+            //var x = scnSvc.From(stream);
+            var bla = new MagicDrawXmiDeserializer();
+            var blub = bla.From(stream);
         }
     }
 }

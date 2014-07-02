@@ -48,9 +48,17 @@
     <Compile Include="Scenario\IScenarioService.cs" />
     <Compile Include="Domain\Scenario.cs" />
     <Compile Include="Scenario\XMI\XmiScenarioServiceBase.cs" />
-    <Compile Include="Scenario\XMI\MagicDraw\MagicDrawXMIScenarioService.cs" />
+    <Compile Include="Scenario\XMI\MagicDraw\MagicDrawXmiScenarioService.cs" />
+    <Compile Include="XMI\Fragment.cs" />
+    <Compile Include="XMI\Lifeline.cs" />
+    <Compile Include="XMI\Message.cs" />
+    <Compile Include="XMI\MagicDrawXmiDeserializer.cs" />
+    <Compile Include="XMI\XmiDeserializerBase.cs" />
+    <Compile Include="XMI\XmiSequenceDiagramModel.cs" />
+    <Compile Include="XMI\OwnedAttribute.cs" />
+    <Compile Include="XMI\PackagedElement.cs" />
+    <Compile Include="XMI\IXmiDeserializer.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

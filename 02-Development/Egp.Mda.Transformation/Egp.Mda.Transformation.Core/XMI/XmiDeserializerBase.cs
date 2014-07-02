@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
-using Egp.Mda.Transformation.Core.Domain;
 
 namespace Egp.Mda.Transformation.Core
 {
-    public abstract class XmiScenarioServiceBase : IScenarioService
+    public abstract class XmiDeserializerBase : IXmiDeserializer
     {
-        protected abstract IEnumerable<Scenario> From(XDocument document);
+        protected abstract XmiSequenceDiagramModel From(XDocument document);
 
-        public IEnumerable<Scenario> From(Stream xmiStream)
-        {
-            var document = XDocument.Load(xmiStream);
-            return From(document);
-        }
+        
 
 
         /// <summary>
@@ -32,6 +26,12 @@ namespace Egp.Mda.Transformation.Core
             if (namespaceOfPrefix == null) throw new ArgumentNullException();
             var ns = namespaceOfPrefix.ToString();
             return XName.Get(attribute, ns);
+        }
+
+        public XmiSequenceDiagramModel From(Stream xmiStream)
+        {
+            var document = XDocument.Load(xmiStream);
+            return From(document);
         }
     }
 }
