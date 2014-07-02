@@ -51,7 +51,6 @@
     <Compile Include="Scenario\Operation.cs" />
     <Compile Include="Scenario\OperationInvocation.cs" />
     <Compile Include="Common\Participant.cs" />
-    <Compile Include="Scenario\ReturnType.cs" />
     <Compile Include="Scenario\Scenario.cs" />
     <Compile Include="Scenario\StateInvariant.cs" />
     <Compile Include="StateMachine\Call.cs" />
