@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Egp.Mda.Transformation.Domain.Scenario;
 
-namespace Egp.Mda.Transformation.Core
+namespace Egp.Mda.Transformation.Domain.Scenario
 {
     public class Scenario
     {
