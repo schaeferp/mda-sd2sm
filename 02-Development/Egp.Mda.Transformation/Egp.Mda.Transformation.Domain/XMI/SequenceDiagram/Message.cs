@@ -9,6 +9,7 @@ namespace Egp.Mda.Transformation.Domain.Xmi.SequenceDiagram
         public string Name { get; set; }
         public string ReceiveEvent { get; set; }
         public string SendEvent { get; set; }
+        public string Sort { get; set; }
 
         public override string ToString()
         {
