@@ -55,7 +55,7 @@ namespace Egp.Mda.Transformation.Core
             if (null == node) throw new ArgumentNullException("node");
             var name = node.Attribute(NameAttributeName).Value;
             var participants = FetchParticipantsForDiagram(node);
-            var messages = ReadMessages(node);
+            var messages = ReadMessages(node, participants);
             var operationInvocations = FetchOperationInvocations(node, participants, messages);
             return new Scenario() {Name = name, Invocations = operationInvocations};
         }
@@ -100,6 +100,7 @@ namespace Egp.Mda.Transformation.Core
                     }
                 }
             }
+            throw new NotImplementedException("Yet to come");
         }
 
         private IDictionary<string, Operation> ReadMessages(XElement node, Dictionary<string, IParticipant> participants)
@@ -114,7 +115,6 @@ namespace Egp.Mda.Transformation.Core
                         Operation = new Operation
                         {
                             Name = messageNode.Attribute(NameAttributeName).Value,
-                            Receiver = participants[messageNode.Attribute()],
                             Sort = OperationSortFromXAttribute(messageNode.Attribute(MessageSortAttributeName))
                         }
                     })
