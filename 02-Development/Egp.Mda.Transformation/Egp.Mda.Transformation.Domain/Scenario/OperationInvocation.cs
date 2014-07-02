@@ -1,4 +1,5 @@
-﻿using Egp.Mda.Transformation.Domain.Common;
+﻿using System;
+using Egp.Mda.Transformation.Domain.Common;
 
 namespace Egp.Mda.Transformation.Domain.Scenario
 {
@@ -8,6 +9,11 @@ namespace Egp.Mda.Transformation.Domain.Scenario
         public StateInvariant PostStateInvariant { get; set; }
         public IParticipant Sender { get; set; }
         public Operation Operation { get; set; }
-        public ReturnType Return { get; set; }
+        public string Return { get; set; }
+
+        public override string ToString()
+        {
+            return String.Format("{0} -> {1} -> {2}", PreStateInvariant, Operation, PostStateInvariant);
+        }
     }
 }
