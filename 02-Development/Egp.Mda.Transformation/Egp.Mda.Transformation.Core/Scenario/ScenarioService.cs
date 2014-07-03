@@ -156,8 +156,9 @@ namespace Egp.Mda.Transformation.Core
 
         private ScenarioOperation CreateOrLookOperation(IParticipant participant, String operationName)
         {
-            var participantOperations = _participantOperations[participant];
-            if (participantOperations == null)
+            IDictionary<string, ScenarioOperation> participantOperations;
+            var dictionaryExists = _participantOperations.TryGetValue(participant, out participantOperations);
+            if (!dictionaryExists)
             {
                 participantOperations = new Dictionary<string, ScenarioOperation>();
                 _participantOperations.Add(participant,participantOperations);
