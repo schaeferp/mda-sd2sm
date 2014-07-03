@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Egp.Mda.Transformation.Domain
@@ -23,7 +24,7 @@ namespace Egp.Mda.Transformation.Domain
 
         public override string ToString()
         {
-            return ParticipantCompositions.ToString();
+            return String.Concat(ParticipantCompositions);
         }
     }
 }

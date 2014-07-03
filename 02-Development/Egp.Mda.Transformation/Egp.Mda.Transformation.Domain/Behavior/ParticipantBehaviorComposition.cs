@@ -16,7 +16,7 @@ namespace Egp.Mda.Transformation.Domain
 
         public override string ToString()
         {
-            return String.Format("{0}, {1}", Participant, BehaviorCompositions);
+            return String.Format("{0}, {1}", Participant, String.Concat(BehaviorCompositions));
         }
     }
 }
