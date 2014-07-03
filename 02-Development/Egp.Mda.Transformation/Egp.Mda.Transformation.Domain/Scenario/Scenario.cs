@@ -16,17 +16,17 @@ namespace Egp.Mda.Transformation.Domain
 
         public IEnumerable<IParticipant> ReceiverParticipants
         {
-            get { return Invocations.Select(i => i.ScenarioOperation.Receiver); }
+            get { return Invocations.Select(i => i.ScenarioOperation.Receiver).Distinct(); }
         }
 
         public IEnumerable<IParticipant> SenderParticipants
         {
-            get { return Invocations.Select(i => i.Sender); }
+            get { return Invocations.Select(i => i.Sender).Distinct(); }
         }
 
         public IEnumerable<IParticipant> Participants
         {
-            get { return ReceiverParticipants.Union(SenderParticipants); }
+            get { return ReceiverParticipants.Union(SenderParticipants).Distinct(); }
         }
 
         public override string ToString()
