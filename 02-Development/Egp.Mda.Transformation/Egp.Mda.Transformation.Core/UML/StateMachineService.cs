@@ -7,43 +7,22 @@ namespace Egp.Mda.Transformation.Core
 {
     public class StateMachineService : IStateMachineService
     {
-        public UmlStateMachineModel From(IOAutomatonModel model)
-        {
-            var stateMachines = model.Automata.Select(a => new StateMachineTransformer(a).Transform());
-            return new UmlStateMachineModel(stateMachines);
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public UmlStateMachine From(Domain.IOAutomaton ioAutomaton)
         {
             var stateMachine = new UmlStateMachine();
 
-            var umlRegion = stateMachine.CreateRegion();
-            var initial = new UmlPseudoState(PseudoStateKind.Initial);
-            umlRegion.AddVertex(initial);
+            // var umlRegion = stateMachine.CreateRegion();
+            // var initial = new UmlPseudoState(PseudoStateKind.Initial);
+            // umlRegion.AddVertex(initial);
 
-            ioAutomaton.States.ForEach(s => TransformState(s, umlRegion));
+            // ioAutomaton.States.ForEach(s => TransformState(s, umlRegion));
             return stateMachine;
+        }
+
+        public UmlStateMachineModel From(IOAutomatonModel model)
+        {
+            var stateMachines = model.Automata.Select(a => new StateMachineTransformer(a).Transform());
+            return new UmlStateMachineModel(stateMachines);
         }
 
         private void TransformState(IOState state, UmlRegion umlRegion)
@@ -52,7 +31,7 @@ namespace Egp.Mda.Transformation.Core
             state.Outgoing.ForEach(t => TransformTransition(t, stableState, umlRegion));
         }
 
-        private void TransformTransition(IOTransition transition, Vertex source, UmlRegion umlRegion)
+        private void TransformTransition(IOTransition transition, UmlVertex source, UmlRegion umlRegion)
         {
             bool created;
             var activityStateName = ": " + transition.InMessageTriple.Operation;
@@ -60,7 +39,7 @@ namespace Egp.Mda.Transformation.Core
 
             if (created)
             {
-                source.Outgoing.Add(new Uml
+                source.Outgoing.Add(new UmlTransition
                 {
                     Target = activityState,
                     Action = transition.InMessageTriple.Operation,
@@ -70,7 +49,7 @@ namespace Egp.Mda.Transformation.Core
                 InitializeSubStateMachine(transition.OutMessages, activityState);
             }
 
-            activityState.Outgoing.Add(new Uml
+            activityState.Outgoing.Add(new UmlTransition
             {
                 Target = umlRegion.GetOrCreateStableState(transition.InMessageTriple.Target.Name),
                 Action = "",
@@ -78,9 +57,8 @@ namespace Egp.Mda.Transformation.Core
             });
         }
 
-        private void InitializeSubStateMachine(IEnumerable<MessageTriple> transition, Vertex parent)
+        private void InitializeSubStateMachine(IEnumerable<MessageTriple> transition, UmlVertex parent)
         {
         }
-
     }
 }
