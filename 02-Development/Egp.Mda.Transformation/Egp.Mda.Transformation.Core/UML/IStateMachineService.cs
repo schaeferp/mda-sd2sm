@@ -4,6 +4,6 @@ namespace Egp.Mda.Transformation.Core
 {
     public interface IStateMachineService
     {
-        UmlStateMachine From(Domain.IOAutomaton ioAutomaton);
+        UmlStateMachineModel From(IOAutomatonModel model);
     }
 }

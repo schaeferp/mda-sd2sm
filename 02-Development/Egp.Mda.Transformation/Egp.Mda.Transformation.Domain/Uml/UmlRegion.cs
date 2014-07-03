@@ -5,49 +5,50 @@ namespace Egp.Mda.Transformation.Domain
 {
     public interface IUmlRegionOwner
     {
-        IList<UmlRegion> Regions { get; }
-
-        UmlRegion CreateRegion();
+        UmlRegion Region { get; set; }
     }
 
     public class UmlRegion
     {
-        private readonly IDictionary<string, Vertex> _vertices;
+        private readonly IDictionary<string, UmlVertex> _vertices;
 
-        public UmlRegion(IUmlRegionOwner owner)
+        public UmlRegion(string name = "")
         {
-            Owner = owner;
-            _vertices = new Dictionary<string, Vertex>();
+            Name = name;
+            _vertices = new Dictionary<string, UmlVertex>();
         }
 
-        private IUmlRegionOwner Owner { get; set; }
+        public string Name { get; set; }
 
-        public ICollection<Vertex> Vertices
+        public IEnumerable<UmlVertex> Vertices
         {
             get { return _vertices.Values; }
         }
 
-        public Vertex GetOrCreateStableState(string name)
+        public UmlVertex GetOrCreateStableState(string name)
         {
             if (_vertices.ContainsKey(name))
                 return _vertices[name];
 
-            return _vertices[name] = new StableState(name);
+            return _vertices[name] = new UmlState {Label = name};
         }
 
-        public Vertex GetOrCreateActivityState(string name, out bool created)
+        public UmlVertex GetOrCreateActivityState(string name, out bool created)
         {
             created = false;
             if (_vertices.ContainsKey(name))
                 return _vertices[name];
 
             created = true;
-            return _vertices[name] = new ActivityState(name);
+            return _vertices[name] = new UmlState {Label = name};
         }
 
-        public void AddVertex(UmlPseudoState initial)
+        public UmlVertex GetOrAddPseudoState(string name, UmlPseudoStateKind kind)
         {
-            throw new NotImplementedException();
+            if (_vertices.ContainsKey(name))
+                return _vertices[name];
+
+            return _vertices[name] = new UmlPseudoState(kind) { Label = name };
         }
     }
 }
