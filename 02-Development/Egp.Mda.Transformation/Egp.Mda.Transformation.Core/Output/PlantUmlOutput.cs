@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Egp.Mda.Transformation.Domain;
 
-
 namespace Egp.Mda.Transformation.Core.Output
 {
     /**
@@ -62,7 +61,8 @@ namespace Egp.Mda.Transformation.Core.Output
                 var origin = state.Label;
                 textDiagram = state.Outgoing.Aggregate(textDiagram,
                     (current, transition) =>
-                        current + (origin + " --> " + transition.Target.Label + " : " + transition.Label + Environment.NewLine));
+                        current +
+                        (origin + " --> " + transition.Target.Label + " : " + transition.Label + Environment.NewLine));
             }
 
             textDiagram += "}";
