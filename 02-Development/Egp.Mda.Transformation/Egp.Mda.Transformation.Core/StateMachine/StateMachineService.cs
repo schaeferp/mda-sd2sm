@@ -10,7 +10,7 @@ namespace Egp.Mda.Transformation.Core
         {
             var stateMachine = new UmlStateMachine();
 
-            UmlRegion umlRegion = stateMachine.CreateRegion();
+            var umlRegion = stateMachine.CreateRegion();
             var initial = new UmlPseudoState(PseudoStateKind.Initial);
             umlRegion.AddVertex(initial);
 
@@ -27,7 +27,7 @@ namespace Egp.Mda.Transformation.Core
         private void TransformTransition(IOTransition transition, Vertex source, UmlRegion umlRegion)
         {
             bool created;
-            string activityStateName = ": " + transition.InMessageTriple.Operation;
+            var activityStateName = ": " + transition.InMessageTriple.Operation;
             var activityState = umlRegion.GetOrCreateActivityState(activityStateName, out created);
 
             if (created)
@@ -52,7 +52,6 @@ namespace Egp.Mda.Transformation.Core
 
         private void InitializeSubStateMachine(IEnumerable<MessageTriple> transition, Vertex parent)
         {
-            
         }
     }
 }

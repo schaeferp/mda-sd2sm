@@ -10,11 +10,11 @@
 
     public class UmlPseudoState : Vertex
     {
-        public PseudoStateKind Kind { get; set; }
-
         public UmlPseudoState(PseudoStateKind kind)
         {
             Kind = kind;
         }
+
+        public PseudoStateKind Kind { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace Egp.Mda.Transformation.Domain
             if (_states.ContainsKey(name))
                 return _states[name];
 
-            return _states[name] = new IOState { Name = name };
+            return _states[name] = new IOState {Name = name};
         }
     }
 }

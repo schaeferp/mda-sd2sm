@@ -1,8 +1,11 @@
-﻿namespace Egp.Mda.Transformation.Domain
+﻿using System.Collections.Generic;
+
+namespace Egp.Mda.Transformation.Domain
 {
     public interface IParticipant
     {
         string Name { get; set; }
+        IList<ScenarioOperation> Operations { get; }
     }
 
     public class Actor : IParticipant

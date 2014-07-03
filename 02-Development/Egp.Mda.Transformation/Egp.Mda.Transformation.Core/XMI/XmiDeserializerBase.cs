@@ -7,6 +7,12 @@ namespace Egp.Mda.Transformation.Core
 {
     public abstract class XmiDeserializerBase : IXmiDeserializer
     {
+        public XmiSequenceDiagramModel From(Stream xmiStream)
+        {
+            var document = XDocument.Load(xmiStream);
+            return From(document);
+        }
+
         protected abstract XmiSequenceDiagramModel From(XDocument document);
 
         /// <summary>
@@ -24,12 +30,6 @@ namespace Egp.Mda.Transformation.Core
             if (namespaceOfPrefix == null) throw new ArgumentNullException();
             var ns = namespaceOfPrefix.ToString();
             return XName.Get(attribute, ns);
-        }
-
-        public XmiSequenceDiagramModel From(Stream xmiStream)
-        {
-            var document = XDocument.Load(xmiStream);
-            return From(document);
         }
     }
 }

@@ -25,8 +25,8 @@ namespace Egp.Mda.Transformation.Domain
         {
             get
             {
-                return  Scenarios.SelectMany(
-                            scn => scn.Invocations.Select(inv => inv.ScenarioOperation.Receiver));
+                return Scenarios.SelectMany(
+                    scn => scn.Invocations.Select(inv => inv.ScenarioOperation.Receiver));
             }
         }
 

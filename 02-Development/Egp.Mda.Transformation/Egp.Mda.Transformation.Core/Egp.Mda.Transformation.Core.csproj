@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behavior\BehaviorService.cs" />
+    <Compile Include="Behavior\IBehaviorService.cs" />
     <Compile Include="IOAutomaton\IEnumerableExtensions.cs" />
     <Compile Include="IOAutomaton\AutomatonService.cs" />
     <Compile Include="IOAutomaton\IAutomatonService.cs" />

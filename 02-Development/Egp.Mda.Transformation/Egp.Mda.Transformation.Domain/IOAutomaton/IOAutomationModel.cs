@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Egp.Mda.Transformation.Domain
 {
@@ -12,10 +8,7 @@ namespace Egp.Mda.Transformation.Domain
 
         public List<IOAutomaton> Automations
         {
-            get
-            {
-                return _automations ?? (_automations = new List<IOAutomaton>());
-            }
+            get { return _automations ?? (_automations = new List<IOAutomaton>()); }
         }
     }
 }

@@ -26,10 +26,10 @@ namespace Egp.Mda.Transformation.Core
         private const string BodyTagName = "body";
         private const string ReceiveEventAttributeName = "receiveEvent";
         private const string SendEventAttributeName = "sendEvent";
-        private XName _xmiTypeAttribute;
+        private XName _umlModel;
         private XName _xmiIdAttribute;
         private XName _xmiIdRefAttribute;
-        private XName _umlModel;
+        private XName _xmiTypeAttribute;
 
         protected override XmiSequenceDiagramModel From(XDocument document)
         {

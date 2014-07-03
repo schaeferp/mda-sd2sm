@@ -15,8 +15,8 @@ namespace Egp.Mda.Transformation.Core
 
         private const string UmlStateInvariantAttributeValue = "uml:ScenarioStateInvariant";
 
-        private XmiSequenceDiagramModel _xmiModel;
         private IDictionary<Lifeline, IParticipant> _participants;
+        private XmiSequenceDiagramModel _xmiModel;
 
         public ScenarioModel From(XmiSequenceDiagramModel xmiModel)
         {
@@ -89,7 +89,7 @@ namespace Egp.Mda.Transformation.Core
             if (lastInvocationHasOperation && !messageIsReply)
             {
                 lastInvocation.PostScenarioStateInvariant = state;
-                var newInvocation = new ScenarioOperationInvocation()
+                var newInvocation = new ScenarioOperationInvocation
                 {
                     PreScenarioStateInvariant = state
                 };
@@ -103,7 +103,7 @@ namespace Egp.Mda.Transformation.Core
             }
             else
             {
-                lastInvocation.ScenarioOperation = new ScenarioOperation()
+                lastInvocation.ScenarioOperation = new ScenarioOperation
                 {
                     Name = message.Name,
                     Receiver = participant,
@@ -117,12 +117,12 @@ namespace Egp.Mda.Transformation.Core
             Scenario scenario)
         {
             var preState = ScenarioStateInvariant.CreateAnonymous();
-            var operation = new ScenarioOperation()
+            var operation = new ScenarioOperation
             {
                 Name = message.Name,
                 Receiver = participant,
             };
-            var invocation = new ScenarioOperationInvocation()
+            var invocation = new ScenarioOperationInvocation
             {
                 PreScenarioStateInvariant = preState,
                 ScenarioOperation = operation
@@ -134,7 +134,7 @@ namespace Egp.Mda.Transformation.Core
         private void AddStateInvariantToInvocations(Fragment fragment, PackagedElement sequenceDiagram,
             Dictionary<IParticipant, ScenarioOperationInvocation> lastInvocationPerParticipant)
         {
-            var state = new ScenarioStateInvariant() {Name = fragment.Body};
+            var state = new ScenarioStateInvariant {Name = fragment.Body};
             foreach (var lifelineId in fragment.Covered)
             {
                 var lifeline = LookupLifelineFor(sequenceDiagram, lifelineId);
@@ -143,7 +143,7 @@ namespace Egp.Mda.Transformation.Core
                 var activeInvocationExists = lastInvocationPerParticipant.TryGetValue(participant,
                     out activeInvocation);
                 if (activeInvocationExists) activeInvocation.PostScenarioStateInvariant = state;
-                var newInvocation = new ScenarioOperationInvocation() {PreScenarioStateInvariant = state};
+                var newInvocation = new ScenarioOperationInvocation {PreScenarioStateInvariant = state};
                 lastInvocationPerParticipant.Remove(participant);
                 lastInvocationPerParticipant.Add(participant, newInvocation);
             }
@@ -183,13 +183,13 @@ namespace Egp.Mda.Transformation.Core
             var ownedAttribute = sequenceDiagram.OwnedAttributes[ownedAttributeId];
             if (String.IsNullOrEmpty(ownedAttribute.Type))
             {
-                participant = new SystemObject() {Name = ownedAttribute.Name};
+                participant = new SystemObject {Name = ownedAttribute.Name};
             }
             else
             {
                 var actorId = ownedAttribute.Type;
                 var packagedElementActor = _xmiModel.PackagedElements[actorId];
-                participant = new Actor() {Name = packagedElementActor.Name};
+                participant = new Actor {Name = packagedElementActor.Name};
             }
             _participants.Add(lifeline, participant);
             return participant;

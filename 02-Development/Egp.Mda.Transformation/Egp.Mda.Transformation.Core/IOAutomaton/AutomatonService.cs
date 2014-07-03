@@ -19,7 +19,7 @@ namespace Egp.Mda.Transformation.Core.IOAutomaton
             {
                 var initialStateName = participantBehaviorComposition.BehaviorCompositions[0].Behaviors[0].PreState;
                 automaton.InitialState = automaton.GetState(initialStateName);
-                participantBehaviorComposition.BehaviorCompositions.ForEach(s => TransformScenario(s,automaton));
+                participantBehaviorComposition.BehaviorCompositions.ForEach(s => TransformScenario(s, automaton));
             }
 
             return automaton;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Egp.Mda.Transformation.Domain
 {
@@ -11,7 +12,7 @@ namespace Egp.Mda.Transformation.Domain
 
     public class UmlRegion
     {
-        private readonly IDictionary<string, Vertex> _vertices; 
+        private readonly IDictionary<string, Vertex> _vertices;
 
         public UmlRegion(IUmlRegionOwner owner)
         {
@@ -46,7 +47,7 @@ namespace Egp.Mda.Transformation.Domain
 
         public void AddVertex(UmlPseudoState initial)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

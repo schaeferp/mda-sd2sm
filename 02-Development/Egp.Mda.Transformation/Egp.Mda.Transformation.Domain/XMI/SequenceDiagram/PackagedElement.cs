@@ -4,10 +4,10 @@ namespace Egp.Mda.Transformation.Domain
 {
     public class PackagedElement
     {
-        private IDictionary<string, OwnedAttribute> _ownedAttributes;
         private IDictionary<string, Fragment> _fragments;
         private IDictionary<string, Lifeline> _lifelines;
         private IDictionary<string, Message> _messages;
+        private IDictionary<string, OwnedAttribute> _ownedAttributes;
 
         public string XmiId { get; set; }
         public string XmiType { get; set; }
