@@ -12,6 +12,7 @@ namespace Egp.Mda.Transformation.Domain
         public List<BehaviorComposition> BehaviorCompositions
         {
             get { return _behaviorCompositions ?? (_behaviorCompositions = new List<BehaviorComposition>()); }
+            set { _behaviorCompositions = value; }
         }
 
         public override string ToString()

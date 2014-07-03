@@ -7,7 +7,7 @@ namespace Egp.Mda.Transformation.Core
     {
         public IOAutomatonModel From(BehaviorModel model)
         {
-            var automata = model.ParticipantCompositions.Select(TransformParticipantBehaviorComposition);
+            var automata = model.DistinctParticipantCompositions.Select(TransformParticipantBehaviorComposition);
             return new IOAutomatonModel(automata);
         }
 
@@ -15,7 +15,7 @@ namespace Egp.Mda.Transformation.Core
         {
             var automaton = new Domain.IOAutomaton(composition.Participant);
 
-            if (composition.BehaviorCompositions.Count > 0)
+            if (composition.BehaviorCompositions.Count == 0)
                 return automaton;
 
             var initialStateName = composition.BehaviorCompositions[0].Behaviors[0].PreState;

@@ -17,6 +17,21 @@ namespace Egp.Mda.Transformation.Domain
             }
         }
 
+        public IList<ParticipantBehaviorComposition> DistinctParticipantCompositions
+        {
+            get
+            {
+                var grouped = ParticipantCompositions.GroupBy(compo => compo.Participant.Name);
+                return grouped.Select(
+                    g =>
+                        new ParticipantBehaviorComposition()
+                        {
+                            Participant = g.ToList().First().Participant,
+                            BehaviorCompositions = g.ToList().SelectMany(e => e.BehaviorCompositions).ToList()
+                        }).ToList();
+            }
+        }
+
         public IEnumerable<ParticipantBehaviorComposition> this[IParticipant participant]
         {
             get { return ParticipantCompositions.Where(p => p.Participant == participant); }
