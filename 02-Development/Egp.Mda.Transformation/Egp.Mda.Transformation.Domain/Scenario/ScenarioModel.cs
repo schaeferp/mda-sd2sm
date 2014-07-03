@@ -11,28 +11,5 @@ namespace Egp.Mda.Transformation.Domain
         {
             get { return _scenarios ?? (_scenarios = new List<Scenario>()); }
         }
-
-        public IEnumerable<IParticipant> SenderParticipants
-        {
-            get
-            {
-                return Scenarios.SelectMany(
-                    scn => scn.Invocations.Select(inv => inv.Sender));
-            }
-        }
-
-        public IEnumerable<IParticipant> ReceiverParticipants
-        {
-            get
-            {
-                return Scenarios.SelectMany(
-                    scn => scn.Invocations.Select(inv => inv.ScenarioOperation.Receiver));
-            }
-        }
-
-        public IEnumerable<IParticipant> Participants
-        {
-            get { return ReceiverParticipants.Union(SenderParticipants); }
-        }
     }
 }

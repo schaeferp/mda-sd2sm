@@ -13,10 +13,11 @@ namespace Egp.Mda.Transformation.Core
         private const string UmlMessageOccurenceSpecificationAttributeValue =
             "uml:MessageOccurrenceSpecification";
 
-        private const string UmlStateInvariantAttributeValue = "uml:ScenarioStateInvariant";
+        private const string UmlStateInvariantAttributeValue = "uml:StateInvariant";
+        private IParticipant _lastSender;
 
-        private IDictionary<Lifeline, IParticipant> _participants;
         private IDictionary<IParticipant, IDictionary<string, ScenarioOperation>> _participantOperations;
+        private IDictionary<Lifeline, IParticipant> _participants;
 
         private XmiSequenceDiagramModel _xmiModel;
 
@@ -60,7 +61,7 @@ namespace Egp.Mda.Transformation.Core
         {
             var message = LookupMessageFor(sequenceDiagram, fragment.Message);
             var participantIsSender = message.SendEvent == fragment.XmiId;
-            if (participantIsSender) return;
+            var messageIsReply = message.Sort == ReplySortValue;
 
             foreach (var lifelineId in fragment.Covered)
             {
@@ -68,26 +69,40 @@ namespace Egp.Mda.Transformation.Core
                 var participant = LookupParticipantFor(sequenceDiagram, lifeline);
                 ScenarioOperationInvocation lastInvocation;
                 var lastInvocationExists = lastInvocationPerParticipant.TryGetValue(participant, out lastInvocation);
+
+                if (lastInvocationExists && messageIsReply && participantIsSender) lastInvocation.Return = message.Name;
+
+                if (participantIsSender)
+                {
+                    _lastSender = participant;
+                    continue;
+                }
+                
+                if (messageIsReply) continue;
+
+                ScenarioOperationInvocation newInvocation;
                 if (lastInvocationExists)
                 {
-                    UpdateCurrentParticipantInvocation(message, lastInvocationPerParticipant, participant,
+                    newInvocation = UpdateCurrentParticipantInvocation(message, lastInvocationPerParticipant, participant,
                         lastInvocation, scenario);
                 }
                 else
                 {
-                    CreateCurrentParticipantInvocation(message, lastInvocationPerParticipant, participant, scenario);
+                    newInvocation = CreateCurrentParticipantInvocation(message, lastInvocationPerParticipant,
+                        participant, scenario);
                 }
+                newInvocation.Sender = _lastSender;
             }
         }
 
-        private void UpdateCurrentParticipantInvocation(Message message,
+        private ScenarioOperationInvocation UpdateCurrentParticipantInvocation(Message message,
             Dictionary<IParticipant, ScenarioOperationInvocation> lastInvocationPerParticipant, IParticipant participant,
             ScenarioOperationInvocation lastInvocation, Scenario scenario)
         {
             var state = ScenarioStateInvariant.CreateAnonymous();
             var lastInvocationHasOperation = lastInvocation.ScenarioOperation != null;
-            var messageIsReply = message.Sort == ReplySortValue;
-            if (lastInvocationHasOperation && !messageIsReply)
+
+            if (lastInvocationHasOperation)
             {
                 lastInvocation.PostScenarioStateInvariant = state;
                 var newInvocation = new ScenarioOperationInvocation
@@ -98,18 +113,12 @@ namespace Egp.Mda.Transformation.Core
                 lastInvocation = newInvocation;
             }
 
-            if (messageIsReply)
-            {
-                lastInvocation.Return = message.Name;
-            }
-            else
-            {
-                lastInvocation.ScenarioOperation = CreateOrLookOperation(participant, message.Name);
-                scenario.Invocations.Add(lastInvocation);
-            }
+            lastInvocation.ScenarioOperation = CreateOrLookOperation(participant, message.Name);
+            scenario.Invocations.Add(lastInvocation);
+            return lastInvocation;
         }
 
-        private void CreateCurrentParticipantInvocation(Message message,
+        private ScenarioOperationInvocation CreateCurrentParticipantInvocation(Message message,
             Dictionary<IParticipant, ScenarioOperationInvocation> lastInvocationPerParticipant, IParticipant participant,
             Scenario scenario)
         {
@@ -122,6 +131,7 @@ namespace Egp.Mda.Transformation.Core
             };
             lastInvocationPerParticipant.Add(participant, invocation);
             scenario.Invocations.Add(invocation);
+            return invocation;
         }
 
         private void AddStateInvariantToInvocations(Fragment fragment, PackagedElement sequenceDiagram,
@@ -161,7 +171,7 @@ namespace Egp.Mda.Transformation.Core
             if (!dictionaryExists)
             {
                 participantOperations = new Dictionary<string, ScenarioOperation>();
-                _participantOperations.Add(participant,participantOperations);
+                _participantOperations.Add(participant, participantOperations);
             }
             ScenarioOperation operation;
             var operationExists = participantOperations.TryGetValue(participant.Name, out operation);
@@ -175,6 +185,7 @@ namespace Egp.Mda.Transformation.Core
             }
             return operation;
         }
+
         private void Init(XmiSequenceDiagramModel xmiModel)
         {
             _xmiModel = xmiModel;

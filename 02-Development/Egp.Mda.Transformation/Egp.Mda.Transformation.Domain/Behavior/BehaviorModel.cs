@@ -20,5 +20,10 @@ namespace Egp.Mda.Transformation.Domain
         {
             get { return ParticipantCompositions.Where(p => p.Participant == participant); }
         }
+
+        public override string ToString()
+        {
+            return ParticipantCompositions.ToString();
+        }
     }
 }
