@@ -16,6 +16,9 @@ namespace Egp.Mda.Transformation.App.Cli
 
             var behaviorService = new BehaviorService();
             var behaviorModel = behaviorService.From(scenarioModel);
+
+            var ioAutomatonService = new AutomatonService();
+            var ioAutomaton = ioAutomatonService.From(behaviorModel);
         }
     }
 }
