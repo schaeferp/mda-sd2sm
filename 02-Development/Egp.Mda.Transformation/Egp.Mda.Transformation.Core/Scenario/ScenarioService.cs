@@ -14,10 +14,10 @@ namespace Egp.Mda.Transformation.Core
             "uml:MessageOccurrenceSpecification";
 
         private const string UmlStateInvariantAttributeValue = "uml:StateInvariant";
+        private IParticipant _lastSender;
 
         private IDictionary<IParticipant, IDictionary<string, ScenarioOperation>> _participantOperations;
         private IDictionary<Lifeline, IParticipant> _participants;
-        private IParticipant _lastSender;
 
         private XmiSequenceDiagramModel _xmiModel;
 
@@ -70,27 +70,27 @@ namespace Egp.Mda.Transformation.Core
                 ScenarioOperationInvocation lastInvocation;
                 var lastInvocationExists = lastInvocationPerParticipant.TryGetValue(participant, out lastInvocation);
 
+                if (lastInvocationExists && messageIsReply && participantIsSender) lastInvocation.Return = message.Name;
+
                 if (participantIsSender)
                 {
                     _lastSender = participant;
+                    continue;
                 }
-                if (lastInvocationExists && messageIsReply && participantIsSender)
+                
+                if (messageIsReply) continue;
+
+                if (lastInvocationExists)
                 {
-                    lastInvocation.Return = message.Name;
+                    lastInvocation.Sender = _lastSender;
+                    UpdateCurrentParticipantInvocation(message, lastInvocationPerParticipant, participant,
+                        lastInvocation, scenario);
                 }
-                else if (!messageIsReply && !participantIsSender)
+                else
                 {
-                    if (lastInvocationExists)
-                    {
-                        lastInvocation.Sender = _lastSender;
-                        UpdateCurrentParticipantInvocation(message, lastInvocationPerParticipant, participant,
-                            lastInvocation, scenario);
-                    }
-                    else
-                    {
-                        var newInvocation = CreateCurrentParticipantInvocation(message, lastInvocationPerParticipant, participant, scenario);
-                        newInvocation.Sender = _lastSender;
-                    }
+                    var newInvocation = CreateCurrentParticipantInvocation(message, lastInvocationPerParticipant,
+                        participant, scenario);
+                    newInvocation.Sender = _lastSender;
                 }
             }
         }
