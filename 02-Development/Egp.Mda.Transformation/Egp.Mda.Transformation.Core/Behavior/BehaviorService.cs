@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Egp.Mda.Transformation.Domain;
 
 namespace Egp.Mda.Transformation.Core
 {
     public class BehaviorService : IBehaviorService
     {
-        private Dictionary<IParticipant, Behavior> _participantActualBehavior;
         private Dictionary<IParticipant, ParticipantBehaviorComposition> _participantBehaviorCompositions;
+        private Dictionary<IParticipant, IList<Behavior>> _participantBehaviors;
 
         public BehaviorModel From(ScenarioModel scenarioModel)
         {
@@ -14,6 +15,8 @@ namespace Egp.Mda.Transformation.Core
             var behaviorModel = new BehaviorModel();
             foreach (var scenario in scenarioModel.Scenarios)
             {
+                CreateBehaviorsFor(scenario.Invocations);
+
                 foreach (var participant in scenario.ReceiverParticipants)
                 {
                     var participantBehavior = CreateOrLookupParticipantBehaviorComposition(participant);
@@ -22,7 +25,7 @@ namespace Egp.Mda.Transformation.Core
                     var behaviorComposition = new BehaviorComposition
                     {
                         Name = scenario.Name,
-                        Behaviors = CreateBehaviorsFor(participant, scenario.Invocations)
+                        Behaviors = _participantBehaviors[participant]
                     };
                     participantBehavior.BehaviorCompositions.Add(behaviorComposition);
                 }
@@ -30,26 +33,31 @@ namespace Egp.Mda.Transformation.Core
             return behaviorModel;
         }
 
-        private List<Behavior> CreateBehaviorsFor(IParticipant participant, IEnumerable<ScenarioOperationInvocation> invocations)
+        private void CreateBehaviorsFor(IEnumerable<ScenarioOperationInvocation> invocations)
         {
-            var results = new List<Behavior>();
             foreach (var invocation in invocations)
             {
                 var inMessage = CreateMessageTripleFrom(invocation);
                 var behavior = CreateBehaviorFrom(invocation);
                 behavior.InMessageTriple = inMessage;
-                _participantActualBehavior.Replace(participant, behavior);
-                if(invocation.Receiver == participant) results.Add(behavior);
+
+                IList<Behavior> behaviors = null;
+                var receiverBehaviorExists = _participantBehaviors.TryGetValue(invocation.Receiver, out behaviors);
+                if (!receiverBehaviorExists)
+                {
+                    behaviors = new List<Behavior>();
+                    _participantBehaviors.Add(invocation.Receiver, behaviors);
+                }
+                behaviors.Add(behavior);
 
 
-                if (_participantActualBehavior.ContainsKey(invocation.Sender))
+                if (_participantBehaviors.ContainsKey(invocation.Sender))
                 {
                     var outMessage = CreateMessageTripleFrom(invocation);
-                    var senderBehavior = _participantActualBehavior[invocation.Sender];
+                    var senderBehavior = _participantBehaviors[invocation.Sender].Last();
                     senderBehavior.OutMessages.Add(outMessage);
                 }
             }
-            return results;
         }
 
         private Behavior CreateBehaviorFrom(ScenarioOperationInvocation invocation)
@@ -86,7 +94,7 @@ namespace Egp.Mda.Transformation.Core
         private void Init()
         {
             _participantBehaviorCompositions = new Dictionary<IParticipant, ParticipantBehaviorComposition>();
-            _participantActualBehavior = new Dictionary<IParticipant, Behavior>();
+            _participantBehaviors = new Dictionary<IParticipant, IList<Behavior>>();
         }
     }
 }
