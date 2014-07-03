@@ -12,8 +12,9 @@ namespace Egp.Mda.Transformation.Domain
     {
         private readonly IDictionary<string, UmlVertex> _vertices;
 
-        public UmlRegion()
+        public UmlRegion(string name = "")
         {
+            Name = name;
             _vertices = new Dictionary<string, UmlVertex>();
         }
 
@@ -42,9 +43,12 @@ namespace Egp.Mda.Transformation.Domain
             return _vertices[name] = new UmlState {Label = name};
         }
 
-        public void AddVertex(UmlPseudoState initial)
+        public UmlVertex GetOrAddPseudoState(string name, UmlPseudoStateKind kind)
         {
-            throw new NotImplementedException();
+            if (_vertices.ContainsKey(name))
+                return _vertices[name];
+
+            return _vertices[name] = new UmlPseudoState(kind) { Label = name };
         }
     }
 }

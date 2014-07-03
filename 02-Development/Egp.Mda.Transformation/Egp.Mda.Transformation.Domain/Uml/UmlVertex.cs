@@ -20,15 +20,15 @@ namespace Egp.Mda.Transformation.Domain
 
     public class UmlPseudoState : UmlVertex
     {
-        public UmlPseudoState(PseudoStateKind kind)
+        public UmlPseudoState(UmlPseudoStateKind kind)
         {
             Kind = kind;
         }
 
-        public PseudoStateKind Kind { get; set; }
+        public UmlPseudoStateKind Kind { get; set; }
     }
 
-    public enum PseudoStateKind
+    public enum UmlPseudoStateKind
     {
         Initial,
         Terminate,
