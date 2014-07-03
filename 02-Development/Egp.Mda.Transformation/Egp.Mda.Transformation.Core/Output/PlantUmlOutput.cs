@@ -1,11 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Egp.Mda.Transformation.Domain;
 
 namespace Egp.Mda.Transformation.Core.Output
 {
+    /**
+     * Generates output for PlantUML, to create diagrams based on this textoutput
+     */
+
     internal class PlantUmlOutput : IOutputGenerator
     {
+        /*
+         * Interface implementation
+         */
+
         public IList<string> GenerateTextDiagrams(UmlStateMachineModel StateMachines)
         {
             IList<string> TextDiagram =
@@ -27,11 +36,11 @@ namespace Egp.Mda.Transformation.Core.Output
             {
                 if (pseudoState.Kind.Equals(UmlPseudoStateKind.Entry))
                 {
-                    textDiagram += "state " + pseudoState.Label + "<<entrypoint>>\r\n";
+                    textDiagram += "state " + pseudoState.Label + "<<entrypoint>>" + Environment.NewLine;
                 }
                 else if (pseudoState.Kind.Equals((UmlPseudoStateKind.Exit)))
                 {
-                    textDiagram += "state " + pseudoState.Label + "<<exitpoint>>\r\n";
+                    textDiagram += "state " + pseudoState.Label + "<<exitpoint>>" + Environment.NewLine;
                 }
             }
 
@@ -42,15 +51,19 @@ namespace Egp.Mda.Transformation.Core.Output
                     select state).ToList();
 
             textDiagram = initialStates.Aggregate(textDiagram,
-                (current, initalState) => current + ("[*] --> " + initalState.Label + "\r\n"));
+                (current, initalState) => current + ("[*] --> " + initalState.Label + Environment.NewLine));
 
             // add initial states
-            IList<UmlTransition> transitions =
-                (from transition in Region.Vertices.OfType<UmlTransition>() select transition).ToList();
-            textDiagram = transitions.Aggregate(textDiagram,
-                (current, transition) =>
-                    current +
-                    (transition.Origin.Label + " --> " + transition.Target.Label + " : " + transition.Label + "\r\n"));
+            IList<UmlState> states = (from state in Region.Vertices.OfType<UmlState>() select state).ToList();
+
+            foreach (var state in states)
+            {
+                var origin = state.Label;
+                textDiagram = state.Outgoing.Aggregate(textDiagram,
+                    (current, transition) =>
+                        current +
+                        (origin + " --> " + transition.Target.Label + " : " + transition.Label + Environment.NewLine));
+            }
 
             textDiagram += "}";
             return textDiagram;
