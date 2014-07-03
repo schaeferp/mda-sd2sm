@@ -16,6 +16,8 @@ namespace Egp.Mda.Transformation.Core
         private const string UmlStateInvariantAttributeValue = "uml:ScenarioStateInvariant";
 
         private IDictionary<Lifeline, IParticipant> _participants;
+        private IDictionary<IParticipant, IDictionary<string, ScenarioOperation>> _participantOperations;
+
         private XmiSequenceDiagramModel _xmiModel;
 
         public ScenarioModel From(XmiSequenceDiagramModel xmiModel)
@@ -44,7 +46,6 @@ namespace Egp.Mda.Transformation.Core
                         break;
                     case UmlMessageOccurenceSpecificationAttributeValue:
                     {
-                        ScenarioOperationInvocation lastInvocation;
                         AddMessageToInvocations(fragment, sequenceDiagram, lastInvocationPerParticipant, scenario);
                         break;
                     }
@@ -103,11 +104,7 @@ namespace Egp.Mda.Transformation.Core
             }
             else
             {
-                lastInvocation.ScenarioOperation = new ScenarioOperation
-                {
-                    Name = message.Name,
-                    Receiver = participant,
-                };
+                lastInvocation.ScenarioOperation = CreateOrLookOperation(participant, message.Name);
                 scenario.Invocations.Add(lastInvocation);
             }
         }
@@ -117,11 +114,7 @@ namespace Egp.Mda.Transformation.Core
             Scenario scenario)
         {
             var preState = ScenarioStateInvariant.CreateAnonymous();
-            var operation = new ScenarioOperation
-            {
-                Name = message.Name,
-                Receiver = participant,
-            };
+            var operation = CreateOrLookOperation(participant, message.Name);
             var invocation = new ScenarioOperationInvocation
             {
                 PreScenarioStateInvariant = preState,
@@ -160,10 +153,32 @@ namespace Egp.Mda.Transformation.Core
             }
         }
 
+
+        private ScenarioOperation CreateOrLookOperation(IParticipant participant, String operationName)
+        {
+            var participantOperations = _participantOperations[participant];
+            if (participantOperations == null)
+            {
+                participantOperations = new Dictionary<string, ScenarioOperation>();
+                _participantOperations.Add(participant,participantOperations);
+            }
+            ScenarioOperation operation;
+            var operationExists = participantOperations.TryGetValue(participant.Name, out operation);
+            if (!operationExists)
+            {
+                operation = new ScenarioOperation
+                {
+                    Name = operationName,
+                    Receiver = participant
+                };
+            }
+            return operation;
+        }
         private void Init(XmiSequenceDiagramModel xmiModel)
         {
             _xmiModel = xmiModel;
             _participants = new Dictionary<Lifeline, IParticipant>();
+            _participantOperations = new Dictionary<IParticipant, IDictionary<string, ScenarioOperation>>();
         }
 
         private Lifeline LookupLifelineFor(PackagedElement sequenceDiagram, string lifelineId)
