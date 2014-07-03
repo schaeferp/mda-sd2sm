@@ -10,11 +10,23 @@ namespace Egp.Mda.Transformation.Domain
 
     public class Actor : IParticipant
     {
+        private IList<ScenarioOperation> _operations;
         public string Name { get; set; }
+
+        public IList<ScenarioOperation> Operations
+        {
+            get { return _operations ?? (_operations = new List<ScenarioOperation>()); }
+        }
     }
 
     public class SystemObject : IParticipant
     {
+        private IList<ScenarioOperation> _operations;
         public string Name { get; set; }
+
+        public IList<ScenarioOperation> Operations
+        {
+            get { return _operations ?? (_operations = new List<ScenarioOperation>()); }
+        }
     }
 }
