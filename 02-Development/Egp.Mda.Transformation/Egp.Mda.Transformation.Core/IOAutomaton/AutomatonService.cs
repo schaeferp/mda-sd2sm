@@ -1,33 +1,33 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Egp.Mda.Transformation.Domain;
 
 namespace Egp.Mda.Transformation.Core.IOAutomaton
 {
     public class AutomatonService : IAutomatonService
     {
-        public IEnumerable<Domain.IOAutomaton> From(IEnumerable<ParticipantBehaviorComposition> contexts)
+        public IOAutomatonModel From(BehaviorModel model)
         {
-            return contexts.Select(TransformContext);
+            var automata = model.ParticipantCompositions.Select(TransformParticipantBehaviorComposition);
+            return new IOAutomatonModel(automata);
         }
 
-        private Domain.IOAutomaton TransformContext(ParticipantBehaviorComposition participantBehaviorComposition)
+        private Domain.IOAutomaton TransformParticipantBehaviorComposition(ParticipantBehaviorComposition composition)
         {
-            var automaton = new Domain.IOAutomaton(participantBehaviorComposition.Participant);
+            var automaton = new Domain.IOAutomaton(composition.Participant);
 
-            if (participantBehaviorComposition.BehaviorCompositions.Count > 0)
-            {
-                var initialStateName = participantBehaviorComposition.BehaviorCompositions[0].Behaviors[0].PreState;
-                automaton.InitialState = automaton.GetState(initialStateName);
-                participantBehaviorComposition.BehaviorCompositions.ForEach(s => TransformScenario(s, automaton));
-            }
+            if (composition.BehaviorCompositions.Count > 0)
+                return automaton;
+
+            var initialStateName = composition.BehaviorCompositions[0].Behaviors[0].PreState;
+            automaton.InitialState = automaton.GetState(initialStateName);
+            composition.BehaviorCompositions.ForEach(s => TransformScenario(s, automaton));
 
             return automaton;
         }
 
-        private void TransformScenario(BehaviorComposition behaviorComposition, Domain.IOAutomaton ioAutomaton)
+        private void TransformScenario(BehaviorComposition composition, Domain.IOAutomaton automaton)
         {
-            behaviorComposition.Behaviors.ForEach(b => AddTransition(b, ioAutomaton));
+            composition.Behaviors.ForEach(b => AddTransition(b, automaton));
         }
 
         private void AddTransition(Behavior behavior, Domain.IOAutomaton ioAutomaton)
