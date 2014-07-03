@@ -7,6 +7,9 @@ using Egp.Mda.Transformation.Domain;
 
 namespace Egp.Mda.Transformation.Core.Output
 {
+    /**
+     * Provides an interface for output generators
+     */
     interface IOutputGenerator
     {
         IList<string> GenerateTextDiagrams(UmlStateMachineModel stateMachines);
