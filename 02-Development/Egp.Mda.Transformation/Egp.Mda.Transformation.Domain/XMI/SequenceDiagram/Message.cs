@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Egp.Mda.Transformation.Domain.Xmi.SequenceDiagram
+namespace Egp.Mda.Transformation.Domain
 {
     public class Message
     {

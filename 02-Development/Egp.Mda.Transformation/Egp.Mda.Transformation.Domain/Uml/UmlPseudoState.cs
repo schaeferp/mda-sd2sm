@@ -1,4 +1,4 @@
-﻿namespace Egp.Mda.Transformation.Domain.Uml
+﻿namespace Egp.Mda.Transformation.Domain
 {
     public enum PseudoStateKind
     {
@@ -8,11 +8,11 @@
         Exit
     }
 
-    public class PseudoState : Vertex
+    public class UmlPseudoState : Vertex
     {
         public PseudoStateKind Kind { get; set; }
 
-        public PseudoState(PseudoStateKind kind)
+        public UmlPseudoState(PseudoStateKind kind)
         {
             Kind = kind;
         }

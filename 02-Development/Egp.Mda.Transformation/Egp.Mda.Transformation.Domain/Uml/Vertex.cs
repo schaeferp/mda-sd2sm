@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace Egp.Mda.Transformation.Domain.Uml
+namespace Egp.Mda.Transformation.Domain
 {
     public abstract class Vertex
     {
-        public IList<Transition> Outgoing { get; protected set; }
+        public IList<Uml> Outgoing { get; protected set; }
     }
 }

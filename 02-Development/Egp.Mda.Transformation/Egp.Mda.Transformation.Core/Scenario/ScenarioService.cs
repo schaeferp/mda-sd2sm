@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Egp.Mda.Transformation.Domain.Common;
-using Egp.Mda.Transformation.Domain.Scenario;
-using Egp.Mda.Transformation.Domain.Xmi.SequenceDiagram;
+using Egp.Mda.Transformation.Domain;
 
 namespace Egp.Mda.Transformation.Core
 {
@@ -15,18 +13,18 @@ namespace Egp.Mda.Transformation.Core
         private const string UmlMessageOccurenceSpecificationAttributeValue =
             "uml:MessageOccurrenceSpecification";
 
-        private const string UmlStateInvariantAttributeValue = "uml:StateInvariant";
+        private const string UmlStateInvariantAttributeValue = "uml:ScenarioStateInvariant";
 
         private XmiSequenceDiagramModel _xmiModel;
         private IDictionary<Lifeline, IParticipant> _participants;
 
-        public IEnumerable<Scenario> From(XmiSequenceDiagramModel xmiModel)
+        public ScenarioModel From(XmiSequenceDiagramModel xmiModel)
         {
             Init(xmiModel);
             var collaborations =
                 xmiModel.PackagedElements.Values.Where(e => e.XmiType == UmlCollaborationAttributeValue).ToList();
-            var result = new List<Scenario>(collaborations.Count);
-            result.AddRange(collaborations.Select(CreateScenarioFrom));
+            var result = new ScenarioModel();
+            result.Scenarios.AddRange(collaborations.Select(CreateScenarioFrom));
             return result;
         }
 
@@ -36,7 +34,7 @@ namespace Egp.Mda.Transformation.Core
             {
                 Name = sequenceDiagram.Name
             };
-            var lastInvocationPerParticipant = new Dictionary<IParticipant, OperationInvocation>();
+            var lastInvocationPerParticipant = new Dictionary<IParticipant, ScenarioOperationInvocation>();
             foreach (var fragment in sequenceDiagram.Fragments.Values)
             {
                 switch (fragment.XmiType)
@@ -46,7 +44,7 @@ namespace Egp.Mda.Transformation.Core
                         break;
                     case UmlMessageOccurenceSpecificationAttributeValue:
                     {
-                        OperationInvocation lastInvocation;
+                        ScenarioOperationInvocation lastInvocation;
                         AddMessageToInvocations(fragment, sequenceDiagram, lastInvocationPerParticipant, scenario);
                         break;
                     }
@@ -57,7 +55,7 @@ namespace Egp.Mda.Transformation.Core
         }
 
         private void AddMessageToInvocations(Fragment fragment, PackagedElement sequenceDiagram,
-            Dictionary<IParticipant, OperationInvocation> lastInvocationPerParticipant, Scenario scenario)
+            Dictionary<IParticipant, ScenarioOperationInvocation> lastInvocationPerParticipant, Scenario scenario)
         {
             var message = LookupMessageFor(sequenceDiagram, fragment.Message);
             var participantIsSender = message.SendEvent == fragment.XmiId;
@@ -67,7 +65,7 @@ namespace Egp.Mda.Transformation.Core
             {
                 var lifeline = LookupLifelineFor(sequenceDiagram, lifelineId);
                 var participant = LookupParticipantFor(sequenceDiagram, lifeline);
-                OperationInvocation lastInvocation;
+                ScenarioOperationInvocation lastInvocation;
                 var lastInvocationExists = lastInvocationPerParticipant.TryGetValue(participant, out lastInvocation);
                 if (lastInvocationExists)
                 {
@@ -82,18 +80,18 @@ namespace Egp.Mda.Transformation.Core
         }
 
         private void UpdateCurrentParticipantInvocation(Message message,
-            Dictionary<IParticipant, OperationInvocation> lastInvocationPerParticipant, IParticipant participant,
-            OperationInvocation lastInvocation, Scenario scenario)
+            Dictionary<IParticipant, ScenarioOperationInvocation> lastInvocationPerParticipant, IParticipant participant,
+            ScenarioOperationInvocation lastInvocation, Scenario scenario)
         {
-            var state = StateInvariant.CreateAnonymous();
-            var lastInvocationHasOperation = lastInvocation.Operation != null;
+            var state = ScenarioStateInvariant.CreateAnonymous();
+            var lastInvocationHasOperation = lastInvocation.ScenarioOperation != null;
             var messageIsReply = message.Sort == ReplySortValue;
             if (lastInvocationHasOperation && !messageIsReply)
             {
-                lastInvocation.PostStateInvariant = state;
-                var newInvocation = new OperationInvocation()
+                lastInvocation.PostScenarioStateInvariant = state;
+                var newInvocation = new ScenarioOperationInvocation()
                 {
-                    PreStateInvariant = state
+                    PreScenarioStateInvariant = state
                 };
                 lastInvocationPerParticipant[participant] = newInvocation;
                 lastInvocation = newInvocation;
@@ -105,7 +103,7 @@ namespace Egp.Mda.Transformation.Core
             }
             else
             {
-                lastInvocation.Operation = new Operation()
+                lastInvocation.ScenarioOperation = new ScenarioOperation()
                 {
                     Name = message.Name,
                     Receiver = participant,
@@ -115,50 +113,50 @@ namespace Egp.Mda.Transformation.Core
         }
 
         private void CreateCurrentParticipantInvocation(Message message,
-            Dictionary<IParticipant, OperationInvocation> lastInvocationPerParticipant, IParticipant participant,
+            Dictionary<IParticipant, ScenarioOperationInvocation> lastInvocationPerParticipant, IParticipant participant,
             Scenario scenario)
         {
-            var preState = StateInvariant.CreateAnonymous();
-            var operation = new Operation()
+            var preState = ScenarioStateInvariant.CreateAnonymous();
+            var operation = new ScenarioOperation()
             {
                 Name = message.Name,
                 Receiver = participant,
             };
-            var invocation = new OperationInvocation()
+            var invocation = new ScenarioOperationInvocation()
             {
-                PreStateInvariant = preState,
-                Operation = operation
+                PreScenarioStateInvariant = preState,
+                ScenarioOperation = operation
             };
             lastInvocationPerParticipant.Add(participant, invocation);
             scenario.Invocations.Add(invocation);
         }
 
         private void AddStateInvariantToInvocations(Fragment fragment, PackagedElement sequenceDiagram,
-            Dictionary<IParticipant, OperationInvocation> lastInvocationPerParticipant)
+            Dictionary<IParticipant, ScenarioOperationInvocation> lastInvocationPerParticipant)
         {
-            var state = new StateInvariant() {Name = fragment.Body};
+            var state = new ScenarioStateInvariant() {Name = fragment.Body};
             foreach (var lifelineId in fragment.Covered)
             {
                 var lifeline = LookupLifelineFor(sequenceDiagram, lifelineId);
                 var participant = LookupParticipantFor(sequenceDiagram, lifeline);
-                OperationInvocation activeInvocation;
+                ScenarioOperationInvocation activeInvocation;
                 var activeInvocationExists = lastInvocationPerParticipant.TryGetValue(participant,
                     out activeInvocation);
-                if (activeInvocationExists) activeInvocation.PostStateInvariant = state;
-                var newInvocation = new OperationInvocation() {PreStateInvariant = state};
+                if (activeInvocationExists) activeInvocation.PostScenarioStateInvariant = state;
+                var newInvocation = new ScenarioOperationInvocation() {PreScenarioStateInvariant = state};
                 lastInvocationPerParticipant.Remove(participant);
                 lastInvocationPerParticipant.Add(participant, newInvocation);
             }
         }
 
         private void AddPostStatesToLastInvocations(
-            Dictionary<IParticipant, OperationInvocation> lastInvocationPerParticipant)
+            Dictionary<IParticipant, ScenarioOperationInvocation> lastInvocationPerParticipant)
         {
             var invocationsWithoutPostState = lastInvocationPerParticipant.Values.Where(
-                lastInvocation => null == lastInvocation.PostStateInvariant);
+                lastInvocation => null == lastInvocation.PostScenarioStateInvariant);
             foreach (var lastInvocation in invocationsWithoutPostState)
             {
-                lastInvocation.PostStateInvariant = StateInvariant.CreateAnonymous();
+                lastInvocation.PostScenarioStateInvariant = ScenarioStateInvariant.CreateAnonymous();
             }
         }
 

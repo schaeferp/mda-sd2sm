@@ -1,4 +1,4 @@
-﻿namespace Egp.Mda.Transformation.Domain.Common
+﻿namespace Egp.Mda.Transformation.Domain
 {
     public class MessageTriple
     {

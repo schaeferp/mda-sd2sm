@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using Egp.Mda.Transformation.Domain.Behavior;
-using Egp.Mda.Transformation.Domain.IOAutomaton;
+using Egp.Mda.Transformation.Domain;
 
 namespace Egp.Mda.Transformation.Core.IOAutomaton
 {
     public interface IAutomatonService
     {
-        IEnumerable<Automaton> From(IEnumerable<Context> contexts);
+        IEnumerable<Domain.IOAutomaton> From(IEnumerable<ParticipantBehaviorComposition> contexts);
     }
 }

@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 
-namespace Egp.Mda.Transformation.Domain.Scenario
+namespace Egp.Mda.Transformation.Domain
 {
     public class Scenario
     {
-        private IList<OperationInvocation> _invocations;
+        private IList<ScenarioOperationInvocation> _invocations;
 
         public string Name { get; set; }
 
-        public IList<OperationInvocation> Invocations
+        public IList<ScenarioOperationInvocation> Invocations
         {
-            get { return _invocations ?? (_invocations = new List<OperationInvocation>()); }
+            get { return _invocations ?? (_invocations = new List<ScenarioOperationInvocation>()); }
         }
 
         public override string ToString()

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Egp.Mda.Transformation.Domain.Common;
 
-namespace Egp.Mda.Transformation.Domain.Behavior
+namespace Egp.Mda.Transformation.Domain
 {
     public class Behavior
     {

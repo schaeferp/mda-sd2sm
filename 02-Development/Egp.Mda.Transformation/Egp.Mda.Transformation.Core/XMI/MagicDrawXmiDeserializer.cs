@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using Egp.Mda.Transformation.Domain.Xmi.SequenceDiagram;
+using Egp.Mda.Transformation.Domain;
 
 namespace Egp.Mda.Transformation.Core
 {

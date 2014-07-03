@@ -1,43 +1,38 @@
 ﻿using System.Collections.Generic;
 using Egp.Mda.Transformation.Core.IOAutomaton;
-using Egp.Mda.Transformation.Domain.Behavior;
-using Egp.Mda.Transformation.Domain.Common;
-using Egp.Mda.Transformation.Domain.IOAutomaton;
-using Egp.Mda.Transformation.Domain.Uml;
-using State = Egp.Mda.Transformation.Domain.IOAutomaton.State;
-using Transition = Egp.Mda.Transformation.Domain.IOAutomaton.Transition;
+using Egp.Mda.Transformation.Domain;
 
-namespace Egp.Mda.Transformation.Core.StateMachine
+namespace Egp.Mda.Transformation.Core
 {
     public class StateMachineService : IStateMachineService
     {
-        public Domain.Uml.StateMachine From(Automaton automaton)
+        public UmlStateMachine From(Domain.IOAutomaton ioAutomaton)
         {
-            var stateMachine = new Domain.Uml.StateMachine();
+            var stateMachine = new UmlStateMachine();
 
-            Region region = stateMachine.CreateRegion();
-            var initial = new PseudoState(PseudoStateKind.Initial);
-            region.AddVertex(initial);
+            UmlRegion umlRegion = stateMachine.CreateRegion();
+            var initial = new UmlPseudoState(PseudoStateKind.Initial);
+            umlRegion.AddVertex(initial);
 
-            automaton.States.ForEach(s => TransformState(s, region));
+            ioAutomaton.States.ForEach(s => TransformState(s, umlRegion));
             return stateMachine;
         }
 
-        private void TransformState(State state, Region region)
+        private void TransformState(IOState state, UmlRegion umlRegion)
         {
-            var stableState = region.GetOrCreateStableState(state.Name);
-            state.Outgoing.ForEach(t => TransformTransition(t, stableState, region));
+            var stableState = umlRegion.GetOrCreateStableState(state.Name);
+            state.Outgoing.ForEach(t => TransformTransition(t, stableState, umlRegion));
         }
 
-        private void TransformTransition(Transition transition, Vertex source, Region region)
+        private void TransformTransition(IOTransition transition, Vertex source, UmlRegion umlRegion)
         {
             bool created;
             string activityStateName = ": " + transition.InMessageTriple.Operation;
-            var activityState = region.GetOrCreateActivityState(activityStateName, out created);
+            var activityState = umlRegion.GetOrCreateActivityState(activityStateName, out created);
 
             if (created)
             {
-                source.Outgoing.Add(new Domain.Uml.Transition
+                source.Outgoing.Add(new Uml
                 {
                     Target = activityState,
                     Action = transition.InMessageTriple.Operation,
@@ -47,9 +42,9 @@ namespace Egp.Mda.Transformation.Core.StateMachine
                 InitializeSubStateMachine(transition.OutMessages, activityState);
             }
 
-            activityState.Outgoing.Add(new Domain.Uml.Transition
+            activityState.Outgoing.Add(new Uml
             {
-                Target = region.GetOrCreateStableState(transition.InMessageTriple.Target.Name),
+                Target = umlRegion.GetOrCreateStableState(transition.InMessageTriple.Target.Name),
                 Action = "",
                 Return = transition.InMessageTriple.Return
             });

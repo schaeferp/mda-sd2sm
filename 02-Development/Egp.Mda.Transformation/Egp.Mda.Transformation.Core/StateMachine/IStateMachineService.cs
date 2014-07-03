@@ -1,10 +1,9 @@
-﻿using Egp.Mda.Transformation.Domain.IOAutomaton;
-using Egp.Mda.Transformation.Domain;
+﻿using Egp.Mda.Transformation.Domain;
 
-namespace Egp.Mda.Transformation.Core.StateMachine
+namespace Egp.Mda.Transformation.Core
 {
     public interface IStateMachineService
     {
-        Domain.Uml.StateMachine From(Automaton automaton);
+        UmlStateMachine From(Domain.IOAutomaton ioAutomaton);
     }
 }

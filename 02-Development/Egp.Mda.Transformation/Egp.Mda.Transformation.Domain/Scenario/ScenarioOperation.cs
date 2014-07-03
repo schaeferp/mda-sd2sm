@@ -1,8 +1,6 @@
-﻿using Egp.Mda.Transformation.Domain.Common;
-
-namespace Egp.Mda.Transformation.Domain.Scenario
+﻿namespace Egp.Mda.Transformation.Domain
 {
-    public class Operation
+    public class ScenarioOperation
     {
         public string Name { get; set; }
         public IParticipant Receiver { get; set; }

@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
-using Egp.Mda.Transformation.Domain.Common;
 
-namespace Egp.Mda.Transformation.Domain.Uml
+namespace Egp.Mda.Transformation.Domain
 {
-    public class State : Vertex
+    public class UmlState : Vertex
     {
     }
 
-    public class StableState : State
+    public class StableState : UmlState
     {
         public StableState(string name)
         {
@@ -17,26 +16,26 @@ namespace Egp.Mda.Transformation.Domain.Uml
         public string Name { get; set; }
     }
 
-    public class ActivityState : State, IRegionOwner
+    public class ActivityState : UmlState, IUmlRegionOwner
     {
         public ActivityState(string name)
         {
             Name = name;
-            Regions = new List<Region>();
+            Regions = new List<UmlRegion>();
         }
 
         public string Name { get; set; }
-        public IList<Region> Regions { get; private set; }
+        public IList<UmlRegion> Regions { get; private set; }
 
-        public Region CreateRegion()
+        public UmlRegion CreateRegion()
         {
-            var region = new Region(this);
+            var region = new UmlRegion(this);
             Regions.Add(region);
             return region;
         }
     }
 
-    public class ActionState : State
+    public class ActionState : UmlState
     {
         public ActionState()
         {

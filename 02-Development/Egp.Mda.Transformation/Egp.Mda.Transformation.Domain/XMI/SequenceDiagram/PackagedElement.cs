@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Egp.Mda.Transformation.Domain.Xmi.SequenceDiagram
+namespace Egp.Mda.Transformation.Domain
 {
     public class PackagedElement
     {
