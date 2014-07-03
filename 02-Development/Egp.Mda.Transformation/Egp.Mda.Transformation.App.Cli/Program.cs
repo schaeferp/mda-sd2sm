@@ -12,7 +12,10 @@ namespace Egp.Mda.Transformation.App.Cli
             var xmiDeserializer = new MagicDrawXmiDeserializer();
             var xmiModel = xmiDeserializer.From(stream);
             var scenarioService = new ScenarioService();
-            var scenarios = scenarioService.From(xmiModel);
+            var scenarioModel = scenarioService.From(xmiModel);
+
+            var behaviorService = new BehaviorService();
+            var behaviorModel = behaviorService.From(scenarioModel);
         }
     }
 }

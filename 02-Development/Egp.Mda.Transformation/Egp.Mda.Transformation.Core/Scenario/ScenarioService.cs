@@ -17,6 +17,7 @@ namespace Egp.Mda.Transformation.Core
 
         private IDictionary<IParticipant, IDictionary<string, ScenarioOperation>> _participantOperations;
         private IDictionary<Lifeline, IParticipant> _participants;
+        private IParticipant _lastSender;
 
         private XmiSequenceDiagramModel _xmiModel;
 
@@ -69,6 +70,10 @@ namespace Egp.Mda.Transformation.Core
                 ScenarioOperationInvocation lastInvocation;
                 var lastInvocationExists = lastInvocationPerParticipant.TryGetValue(participant, out lastInvocation);
 
+                if (participantIsSender)
+                {
+                    _lastSender = participant;
+                }
                 if (lastInvocationExists && messageIsReply && participantIsSender)
                 {
                     lastInvocation.Return = message.Name;
@@ -77,12 +82,14 @@ namespace Egp.Mda.Transformation.Core
                 {
                     if (lastInvocationExists)
                     {
+                        lastInvocation.Sender = _lastSender;
                         UpdateCurrentParticipantInvocation(message, lastInvocationPerParticipant, participant,
                             lastInvocation, scenario);
                     }
                     else
                     {
-                        CreateCurrentParticipantInvocation(message, lastInvocationPerParticipant, participant, scenario);
+                        var newInvocation = CreateCurrentParticipantInvocation(message, lastInvocationPerParticipant, participant, scenario);
+                        newInvocation.Sender = _lastSender;
                     }
                 }
             }
@@ -110,7 +117,7 @@ namespace Egp.Mda.Transformation.Core
             scenario.Invocations.Add(lastInvocation);
         }
 
-        private void CreateCurrentParticipantInvocation(Message message,
+        private ScenarioOperationInvocation CreateCurrentParticipantInvocation(Message message,
             Dictionary<IParticipant, ScenarioOperationInvocation> lastInvocationPerParticipant, IParticipant participant,
             Scenario scenario)
         {
@@ -123,6 +130,7 @@ namespace Egp.Mda.Transformation.Core
             };
             lastInvocationPerParticipant.Add(participant, invocation);
             scenario.Invocations.Add(invocation);
+            return invocation;
         }
 
         private void AddStateInvariantToInvocations(Fragment fragment, PackagedElement sequenceDiagram,
