@@ -80,22 +80,22 @@ namespace Egp.Mda.Transformation.Core
                 
                 if (messageIsReply) continue;
 
+                ScenarioOperationInvocation newInvocation;
                 if (lastInvocationExists)
                 {
-                    lastInvocation.Sender = _lastSender;
-                    UpdateCurrentParticipantInvocation(message, lastInvocationPerParticipant, participant,
+                    newInvocation = UpdateCurrentParticipantInvocation(message, lastInvocationPerParticipant, participant,
                         lastInvocation, scenario);
                 }
                 else
                 {
-                    var newInvocation = CreateCurrentParticipantInvocation(message, lastInvocationPerParticipant,
+                    newInvocation = CreateCurrentParticipantInvocation(message, lastInvocationPerParticipant,
                         participant, scenario);
-                    newInvocation.Sender = _lastSender;
                 }
+                newInvocation.Sender = _lastSender;
             }
         }
 
-        private void UpdateCurrentParticipantInvocation(Message message,
+        private ScenarioOperationInvocation UpdateCurrentParticipantInvocation(Message message,
             Dictionary<IParticipant, ScenarioOperationInvocation> lastInvocationPerParticipant, IParticipant participant,
             ScenarioOperationInvocation lastInvocation, Scenario scenario)
         {
@@ -115,6 +115,7 @@ namespace Egp.Mda.Transformation.Core
 
             lastInvocation.ScenarioOperation = CreateOrLookOperation(participant, message.Name);
             scenario.Invocations.Add(lastInvocation);
+            return lastInvocation;
         }
 
         private ScenarioOperationInvocation CreateCurrentParticipantInvocation(Message message,

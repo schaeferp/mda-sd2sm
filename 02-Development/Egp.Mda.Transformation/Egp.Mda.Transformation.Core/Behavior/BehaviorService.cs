@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Egp.Mda.Transformation.Domain;
 
 namespace Egp.Mda.Transformation.Core
 {
     public class BehaviorService : IBehaviorService
     {
-        private Dictionary<IParticipant, ParticipantBehaviorComposition> _participantBehaviorCompositions;
         private Dictionary<IParticipant, Behavior> _participantActualBehavior;
+        private Dictionary<IParticipant, ParticipantBehaviorComposition> _participantBehaviorCompositions;
 
         public BehaviorModel From(ScenarioModel scenarioModel)
         {
@@ -23,7 +22,7 @@ namespace Egp.Mda.Transformation.Core
                     var behaviorComposition = new BehaviorComposition
                     {
                         Name = scenario.Name,
-                        Behaviors = CreateBehaviorsFor(scenario.Invocations)
+                        Behaviors = CreateBehaviorsFor(participant, scenario.Invocations)
                     };
                     participantBehavior.BehaviorCompositions.Add(behaviorComposition);
                 }
@@ -31,7 +30,7 @@ namespace Egp.Mda.Transformation.Core
             return behaviorModel;
         }
 
-        private List<Behavior> CreateBehaviorsFor(IEnumerable<ScenarioOperationInvocation> invocations)
+        private List<Behavior> CreateBehaviorsFor(IParticipant participant, IEnumerable<ScenarioOperationInvocation> invocations)
         {
             var results = new List<Behavior>();
             foreach (var invocation in invocations)
@@ -39,13 +38,16 @@ namespace Egp.Mda.Transformation.Core
                 var inMessage = CreateMessageTripleFrom(invocation);
                 var behavior = CreateBehaviorFrom(invocation);
                 behavior.InMessageTriple = inMessage;
-                _participantActualBehavior.Replace(invocation.Receiver, behavior);
-                results.Add(behavior);
+                _participantActualBehavior.Replace(participant, behavior);
+                if(invocation.Receiver == participant) results.Add(behavior);
 
 
-                var outMessage = CreateMessageTripleFrom(invocation);
-                var senderBehavior = _participantActualBehavior[invocation.Sender];
-                senderBehavior.OutMessages.Add(outMessage);
+                if (_participantActualBehavior.ContainsKey(invocation.Sender))
+                {
+                    var outMessage = CreateMessageTripleFrom(invocation);
+                    var senderBehavior = _participantActualBehavior[invocation.Sender];
+                    senderBehavior.OutMessages.Add(outMessage);
+                }
             }
             return results;
         }
