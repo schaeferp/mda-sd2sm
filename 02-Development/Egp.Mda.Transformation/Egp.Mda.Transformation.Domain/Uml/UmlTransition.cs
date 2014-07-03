@@ -5,6 +5,7 @@ namespace Egp.Mda.Transformation.Domain
     public class UmlTransition
     {
         public UmlVertex Target { get; set; }
+        public UmlVertex Origin { get; set; }
         public string Guard { get; set; }
         public string Action { get; set; }
         public string Return { get; set; }
