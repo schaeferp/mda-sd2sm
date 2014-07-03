@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Egp.Mda.Transformation.Core.IOAutomaton;
 using Egp.Mda.Transformation.Domain;
 
@@ -6,6 +7,33 @@ namespace Egp.Mda.Transformation.Core
 {
     public class StateMachineService : IStateMachineService
     {
+        public UmlStateMachineModel From(IOAutomatonModel model)
+        {
+            var stateMachines = model.Automata.Select(a => new StateMachineTransformer(a).Transform());
+            return new UmlStateMachineModel(stateMachines);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public UmlStateMachine From(Domain.IOAutomaton ioAutomaton)
         {
             var stateMachine = new UmlStateMachine();
@@ -53,5 +81,6 @@ namespace Egp.Mda.Transformation.Core
         private void InitializeSubStateMachine(IEnumerable<MessageTriple> transition, Vertex parent)
         {
         }
+
     }
 }
