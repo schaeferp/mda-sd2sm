@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Egp.Mda.Transformation.Core.IOAutomaton;
 using Egp.Mda.Transformation.Domain;
 
 namespace Egp.Mda.Transformation.Core

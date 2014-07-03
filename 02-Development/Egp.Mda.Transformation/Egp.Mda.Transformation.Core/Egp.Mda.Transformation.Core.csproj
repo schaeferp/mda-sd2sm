@@ -41,8 +41,8 @@
   <ItemGroup>
     <Compile Include="Behavior\BehaviorService.cs" />
     <Compile Include="Behavior\IBehaviorService.cs" />
-    <Compile Include="Helpers\DictionaryExtensions.cs" />
-    <Compile Include="IOAutomaton\IEnumerableExtensions.cs" />
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="IOAutomaton\AutomatonService.cs" />
     <Compile Include="IOAutomaton\IAutomatonService.cs" />
     <Compile Include="Output\IFileWriter.cs" />
