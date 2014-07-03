@@ -44,7 +44,7 @@
     <Compile Include="Common\MessageTriple.cs" />
     <Compile Include="Behavior\ParticipantBehaviorComposition.cs" />
     <Compile Include="Behavior\BehaviorComposition.cs" />
-    <Compile Include="IOAutomaton\IOAutomationModel.cs" />
+    <Compile Include="IOAutomaton\IOAutomatonModel.cs" />
     <Compile Include="IOAutomaton\IOAutomaton.cs" />
     <Compile Include="IOAutomaton\IOState.cs" />
     <Compile Include="IOAutomaton\IOTransition.cs" />
@@ -55,12 +55,11 @@
     <Compile Include="Scenario\Scenario.cs" />
     <Compile Include="Scenario\ScenarioModel.cs" />
     <Compile Include="Scenario\ScenarioStateInvariant.cs" />
-    <Compile Include="UML\UmlPseudoState.cs" />
+    <Compile Include="UML\UmlStateMachineModel.cs" />
     <Compile Include="UML\UmlRegion.cs" />
-    <Compile Include="UML\UmlState.cs" />
     <Compile Include="UML\UmlStateMachine.cs" />
-    <Compile Include="UML\Uml.cs" />
-    <Compile Include="UML\Vertex.cs" />
+    <Compile Include="UML\UmlTransition.cs" />
+    <Compile Include="UML\UmlVertex.cs" />
     <Compile Include="XMI\SequenceDiagram\Fragment.cs" />
     <Compile Include="XMI\SequenceDiagram\Lifeline.cs" />
     <Compile Include="XMI\SequenceDiagram\Message.cs" />
