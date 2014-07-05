@@ -11,9 +11,9 @@ namespace Egp.Mda.Transformation.Core
             return new IOAutomatonModel(automata);
         }
 
-        private Domain.IOAutomaton TransformParticipantBehaviorComposition(ParticipantBehaviorComposition composition)
+        private IOAutomaton TransformParticipantBehaviorComposition(ParticipantBehaviorComposition composition)
         {
-            var automaton = new Domain.IOAutomaton(composition.Participant);
+            var automaton = new IOAutomaton(composition.Participant);
 
             if (composition.BehaviorCompositions.Count == 0)
                 return automaton;
@@ -25,12 +25,12 @@ namespace Egp.Mda.Transformation.Core
             return automaton;
         }
 
-        private void TransformScenario(BehaviorComposition composition, Domain.IOAutomaton automaton)
+        private void TransformScenario(BehaviorComposition composition, IOAutomaton automaton)
         {
             composition.Behaviors.ForEach(b => AddTransition(b, automaton));
         }
 
-        private void AddTransition(Behavior behavior, Domain.IOAutomaton ioAutomaton)
+        private void AddTransition(Behavior behavior, IOAutomaton ioAutomaton)
         {
             var source = ioAutomaton.GetState(behavior.PreState);
             var target = ioAutomaton.GetState(behavior.PostState);
