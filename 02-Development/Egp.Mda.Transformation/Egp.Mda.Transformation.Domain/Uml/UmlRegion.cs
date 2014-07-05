@@ -25,6 +25,13 @@ namespace Egp.Mda.Transformation.Domain
             get { return _vertices.Values; }
         }
 
+        public UmlVertex AddState(string name = "")
+        {
+            var vertex = new UmlState {Label = name};
+            _vertices["_" + _vertices.Count] = vertex;
+            return vertex;
+        }
+
         public UmlVertex EnsureState(string name, Action<UmlVertex> onCreate = null)
         {
             if (_vertices.ContainsKey(name))
@@ -40,7 +47,7 @@ namespace Egp.Mda.Transformation.Domain
             if (_vertices.ContainsKey(name))
                 return _vertices[name];
 
-            var vertex = new UmlPseudoState(kind) { Label = name };
+            var vertex = new UmlPseudoState(kind) {Label = name};
             if (onCreate != null) onCreate(vertex);
             return _vertices[name] = vertex;
         }

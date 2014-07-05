@@ -11,7 +11,7 @@ namespace Egp.Mda.Transformation.Core
         private const string StateLabel = "do /";
         private const string VarName = "check";
         private const string CallLabel = "{0}.{1};";
-        private const string AssignLabel = "{0} := " + CallLabel;
+        private const string AssignLabel = "{0} := {1}.{2}";
         private const string CheckLabel = "{0} = {1}";
 
         private readonly string _activityName;
@@ -43,7 +43,8 @@ namespace Egp.Mda.Transformation.Core
             if (behaviors.Count == 0)
                 return CreateExitPoint();
 
-            var state = _region.EnsureState(Label(StateLabel + Environment.NewLine));
+            var state = _region.AddState();
+            state.Label = Label(StateLabel);
 
             if (behaviors.Count == 1)
             {
@@ -143,7 +144,6 @@ namespace Egp.Mda.Transformation.Core
             foreach (var g in callGroups)
             {
                 var groupBehaviors = g.Returns.SelectMany(r => r.Behaviors).ToList();
-                groupBehaviors.ForEach(b => b.RemoveAt(0));
                 var groupState = CreateState(groupBehaviors);
                 origin.Outgoing.Add(new UmlTransition {Target = groupState});
             }

@@ -4,8 +4,14 @@ namespace Egp.Mda.Transformation.Domain
 {
     public abstract class UmlVertex
     {
+        private IList<UmlTransition> _outgoing;
+
         public string Label { get; set; }
-        public IList<UmlTransition> Outgoing { get; protected set; }
+
+        public IList<UmlTransition> Outgoing
+        {
+            get { return _outgoing ?? (_outgoing = new List<UmlTransition>()); }
+        }
     }
 
     public class UmlState : UmlVertex, IUmlRegionOwner

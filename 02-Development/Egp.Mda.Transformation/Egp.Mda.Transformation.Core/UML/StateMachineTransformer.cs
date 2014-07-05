@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Egp.Mda.Transformation.Domain;
 
 namespace Egp.Mda.Transformation.Core
@@ -26,10 +27,16 @@ namespace Egp.Mda.Transformation.Core
         private void Transform()
         {
             _machine.Region = new UmlRegion(_automaton.Participant.Name);
-            _machine.Region.EnsurePseudoState("*", UmlPseudoStateKind.Initial);
+            var entry = _machine.Region.EnsurePseudoState("*", UmlPseudoStateKind.Initial);
+
+            if (_automaton.InitialState != null)
+            {
+                var initial = _machine.Region.EnsureState(_automaton.InitialState.Name);
+                entry.Outgoing.Add(new UmlTransition {Target = initial});
+            }
 
             _automaton.States.ForEach(TransformState);
-            _actions.ForEach(entry => TransformActivity(entry.Key, entry.Value));
+            _actions.ForEach(action => TransformActivity(action.Key, action.Value));
         }
 
         private void TransformState(IOState state)
@@ -46,9 +53,9 @@ namespace Egp.Mda.Transformation.Core
 
             activity.Outgoing.Add(new UmlTransition
             {
-                Target = _machine.Region.EnsureState(transition.InMessageTriple.Target.Name),
+                Target = _machine.Region.EnsureState(transition.Target.Name),
                 Action = "",
-                Return = transition.InMessageTriple.Return
+                Return = "return " + transition.InMessageTriple.Return
             });
         }
 
