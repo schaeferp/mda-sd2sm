@@ -24,9 +24,8 @@ namespace Egp.Mda.Transformation.Core.Output
 
         private static string PrintRegion(UmlRegion Region)
         {
-
             // names a region
-            var textDiagram = "@startuml"+ Environment.NewLine + "state " + Region.Name + "{";
+            var textDiagram = "@startuml" + Environment.NewLine + "state " + Region.Name + "{";
 
             // add entry- and exit-states
             IList<UmlPseudoState> pseudoStates = (from state in Region.Vertices.OfType<UmlPseudoState>()

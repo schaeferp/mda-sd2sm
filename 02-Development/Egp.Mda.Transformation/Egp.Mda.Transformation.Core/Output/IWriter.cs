@@ -3,6 +3,6 @@
     internal interface IWriter
     {
         void write(string text);
-        void write(string uri, string text); 
+        void write(string uri, string text);
     }
 }
