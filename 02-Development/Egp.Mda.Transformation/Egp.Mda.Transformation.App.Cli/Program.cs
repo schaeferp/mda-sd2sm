@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Egp.Mda.Transformation.Core;
 
 namespace Egp.Mda.Transformation.App.Cli
@@ -19,6 +20,9 @@ namespace Egp.Mda.Transformation.App.Cli
 
             var ioAutomatonService = new AutomatonService();
             var ioAutomaton = ioAutomatonService.From(behaviorModel);
+
+            var stateMachineService = new StateMachineService();
+            var stateMachine = stateMachineService.From(ioAutomaton);
         }
     }
 }
