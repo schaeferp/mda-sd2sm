@@ -45,6 +45,8 @@
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="IOAutomaton\AutomatonService.cs" />
     <Compile Include="IOAutomaton\IAutomatonService.cs" />
+    <Compile Include="Output\FileWriter.cs" />
+    <Compile Include="Output\IWriter.cs" />
     <Compile Include="Output\IOutputGenerator.cs" />
     <Compile Include="Output\PlantUmlOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
