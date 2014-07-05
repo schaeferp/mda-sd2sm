@@ -17,6 +17,11 @@ namespace Egp.Mda.Transformation.Domain
         {
             get { return _operations ?? (_operations = new List<ScenarioOperation>()); }
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
     public class SystemObject : IParticipant
@@ -27,6 +32,11 @@ namespace Egp.Mda.Transformation.Domain
         public IList<ScenarioOperation> Operations
         {
             get { return _operations ?? (_operations = new List<ScenarioOperation>()); }
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

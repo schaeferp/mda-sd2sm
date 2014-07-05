@@ -11,10 +11,10 @@ namespace Egp.Mda.Transformation.Core
 
         public BehaviorModel From(ScenarioModel scenarioModel)
         {
-            Init();
             var behaviorModel = new BehaviorModel();
             foreach (var scenario in scenarioModel.Scenarios)
             {
+                Init();
                 CreateBehaviorsFor(scenario.Invocations);
 
                 foreach (var participant in scenario.ReceiverParticipants)

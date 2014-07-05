@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Egp.Mda.Transformation.Core.IOAutomaton
+namespace Egp.Mda.Transformation.Core
 {
     public static class IEnumerableExtensions
     {

@@ -20,7 +20,7 @@ namespace Egp.Mda.Transformation.Domain
 
         public override string ToString()
         {
-            return String.Format("{0}|{1}|{2}|{3}", PreState, InMessageTriple, OutMessages, PostState);
+            return String.Format("{0}|{1}|{2}|{3}", PreState, InMessageTriple, String.Concat(OutMessages), PostState);
         }
     }
 }
