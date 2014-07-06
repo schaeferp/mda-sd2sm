@@ -2,7 +2,7 @@
 {
     internal interface IWriter
     {
-        void write(string text);
-        void write(string uri, string text); 
+        void Write(string text);
+        void Write(string uri, string text);
     }
 }
