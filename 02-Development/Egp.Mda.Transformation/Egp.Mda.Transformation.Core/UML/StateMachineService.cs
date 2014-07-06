@@ -3,6 +3,9 @@ using Egp.Mda.Transformation.Domain;
 
 namespace Egp.Mda.Transformation.Core
 {
+    /// <summary>
+    ///     Default implementation of the <see cref="IStateMachineService" /> interface.
+    /// </summary>
     public class StateMachineService : IStateMachineService
     {
         public UmlStateMachineModel From(IOAutomatonModel model)
