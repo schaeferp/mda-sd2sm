@@ -24,7 +24,7 @@ namespace Egp.Mda.Transformation.Domain
                 var grouped = ParticipantCompositions.GroupBy(compo => compo.Participant.Name);
                 return grouped.Select(
                     g =>
-                        new ParticipantBehaviorComposition()
+                        new ParticipantBehaviorComposition
                         {
                             Participant = g.ToList().First().Participant,
                             BehaviorCompositions = g.ToList().SelectMany(e => e.BehaviorCompositions).ToList()
