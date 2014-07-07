@@ -6,7 +6,7 @@ namespace Egp.Mda.Transformation.Core.Output
     /// <summary>
     ///     Provides an interface for output generators
     /// </summary>
-    internal interface IOutputGenerator
+    public interface IOutputGenerator
     {
         /// <summary>
         ///     Renders diagrams for all state machines supplied by the model.

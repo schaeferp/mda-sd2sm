@@ -2,7 +2,7 @@
 
 namespace Egp.Mda.Transformation.Core.Output
 {
-    internal class FileWriter : IWriter
+    public class FileWriter : IWriter
     {
         public void Write(string text)
         {

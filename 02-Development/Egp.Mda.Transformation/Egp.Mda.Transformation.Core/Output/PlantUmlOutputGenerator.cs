@@ -8,7 +8,7 @@ namespace Egp.Mda.Transformation.Core.Output
     /// <summary>
     ///     Generates output for PlantUML, to create diagrams based on this textoutput
     /// </summary>
-    internal class PlantUmlOutputGenerator : IOutputGenerator
+    public class PlantUmlOutputGenerator : IOutputGenerator
     {
         // Interface implementation
         public IList<string> GenerateTextDiagrams(UmlStateMachineModel stateMachines)
