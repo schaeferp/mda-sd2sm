@@ -7,7 +7,7 @@ namespace Egp.Mda.Transformation.Core
 {
     public abstract class XmiDeserializerBase : IXmiDeserializer
     {
-        public XmiSequenceDiagramModel From(Stream xmiStream)
+        public XmiSequenceDiagramModel SequenceDiagramFrom(Stream xmiStream)
         {
             var document = XDocument.Load(xmiStream);
             return From(document);

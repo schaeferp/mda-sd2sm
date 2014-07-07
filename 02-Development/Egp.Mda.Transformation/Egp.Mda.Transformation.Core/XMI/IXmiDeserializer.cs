@@ -5,6 +5,6 @@ namespace Egp.Mda.Transformation.Core
 {
     public interface IXmiDeserializer
     {
-        XmiSequenceDiagramModel From(Stream xmi);
+        XmiSequenceDiagramModel SequenceDiagramFrom(Stream xmi);
     }
 }
