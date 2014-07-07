@@ -57,7 +57,7 @@ namespace Egp.Mda.Transformation.Core
 
         protected override XmiSequenceDiagramModel From(XDocument document)
         {
-            Init(document);
+            LookupXmlNs(document);
             return new XmiSequenceDiagramModel {PackagedElements = FetchPackagedElements(document)};
         }
 
@@ -165,7 +165,7 @@ namespace Egp.Mda.Transformation.Core
         ///     Looks up any required XMLNS URLs and stores them for later usage.
         /// </summary>
         /// <param name="document">The input XMI document.</param>
-        private void Init(XDocument document)
+        private void LookupXmlNs(XDocument document)
         {
             _xmiIdAttribute = LookupXName(XmiPrefix, IdAttributeName, document);
             _xmiTypeAttribute = LookupXName(XmiPrefix, TypeAttributeName, document);
