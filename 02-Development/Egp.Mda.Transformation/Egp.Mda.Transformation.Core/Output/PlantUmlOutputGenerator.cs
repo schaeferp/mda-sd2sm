@@ -13,15 +13,18 @@ namespace Egp.Mda.Transformation.Core.Output
         // Interface implementation
         public IList<string> GenerateTextDiagrams(UmlStateMachineModel stateMachines)
         {
-            return stateMachines.Machines
+            var tempDiagramList = stateMachines.Machines
                 .Select(stateMachine => PrintRegion(stateMachine.Region))
                 .ToList();
+            tempDiagramList.Insert(0, "@startuml");
+            tempDiagramList.Add("@enduml");
+            return tempDiagramList;
         }
 
         private static string PrintRegion(UmlRegion region)
         {
             // names a region
-            var textDiagram = "@startuml" + Environment.NewLine + "state " + region.Name + "{";
+            var textDiagram = Environment.NewLine + "state " + region.Name + "{";
 
             // add entry- and exit-states
             IList<UmlPseudoState> pseudoStates = (from state in region.Vertices.OfType<UmlPseudoState>()
