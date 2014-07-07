@@ -1,4 +1,4 @@
-﻿namespace Egp.Mda.Transformation.Core.Output
+﻿namespace Egp.Mda.Transformation.Core
 {
     public interface IWriter
     {

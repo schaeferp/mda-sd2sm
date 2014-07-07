@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Egp.Mda.Transformation.Domain;
 
-namespace Egp.Mda.Transformation.Core.Output
+namespace Egp.Mda.Transformation.Core
 {
     /// <summary>
     ///     Generates output for PlantUML, to create diagrams based on this textoutput

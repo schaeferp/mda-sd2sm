@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Egp.Mda.Transformation.Core.Output
+namespace Egp.Mda.Transformation.Core
 {
     public class FileWriter : IWriter
     {

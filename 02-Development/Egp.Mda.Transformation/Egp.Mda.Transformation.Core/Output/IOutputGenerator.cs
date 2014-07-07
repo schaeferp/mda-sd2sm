@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Egp.Mda.Transformation.Domain;
 
-namespace Egp.Mda.Transformation.Core.Output
+namespace Egp.Mda.Transformation.Core
 {
     /// <summary>
     ///     Provides an interface for output generators

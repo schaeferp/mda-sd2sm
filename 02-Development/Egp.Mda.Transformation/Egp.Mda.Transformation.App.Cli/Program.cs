@@ -1,7 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Egp.Mda.Transformation.Core;
-using Egp.Mda.Transformation.Core.Output;
 
 namespace Egp.Mda.Transformation.App.Cli
 {
@@ -23,15 +21,12 @@ namespace Egp.Mda.Transformation.App.Cli
             var ioAutomaton = ioAutomatonService.From(behaviorModel);
 
             var stateMachineService = new StateMachineService();
-            var stateMachine = stateMachineService.From(ioAutomaton);
+            var stateMachineModel = stateMachineService.From(ioAutomaton);
 
-            //todo: stateMachineModel instead of stateMachine expected
-            /*
-            IOutputGenerator plantUmlOutputGenerator = new PlantUmlOutputGenerator();
+            var plantUmlOutputGenerator = new PlantUmlOutputGenerator();
             var diagramList = plantUmlOutputGenerator.GenerateTextDiagrams(stateMachineModel);
-            IWriter iWriter = new FileWriter();
-            iWriter.Write(diagramList.ToString());
-             */
+            var writer = new FileWriter();
+            writer.Write(args[1], diagramList.ToString());
         }
     }
 }
