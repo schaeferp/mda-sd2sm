@@ -5,30 +5,26 @@ using Egp.Mda.Transformation.Domain;
 
 namespace Egp.Mda.Transformation.Core.Output
 {
-    /**
-     * Generates output for PlantUML, to create diagrams based on this textoutput
-     */
-
-    internal class PlantUmlOutput : IOutputGenerator
+    /// <summary>
+    ///     Generates output for PlantUML, to create diagrams based on this textoutput
+    /// </summary>
+    internal class PlantUmlOutputGenerator : IOutputGenerator
     {
-        /*
-         * Interface implementation
-         */
-
-        public IList<string> GenerateTextDiagrams(UmlStateMachineModel StateMachines)
+        // Interface implementation
+        public IList<string> GenerateTextDiagrams(UmlStateMachineModel stateMachines)
         {
-            IList<string> TextDiagram =
-                StateMachines.Machines.Select(StateMachine => PrintRegion(StateMachine.Region)).ToList();
-            return TextDiagram;
+            return stateMachines.Machines
+                .Select(stateMachine => PrintRegion(stateMachine.Region))
+                .ToList();
         }
 
-        private static string PrintRegion(UmlRegion Region)
+        private static string PrintRegion(UmlRegion region)
         {
             // names a region
-            var textDiagram = "@startuml" + Environment.NewLine + "state " + Region.Name + "{";
+            var textDiagram = "@startuml" + Environment.NewLine + "state " + region.Name + "{";
 
             // add entry- and exit-states
-            IList<UmlPseudoState> pseudoStates = (from state in Region.Vertices.OfType<UmlPseudoState>()
+            IList<UmlPseudoState> pseudoStates = (from state in region.Vertices.OfType<UmlPseudoState>()
                 where (state.Kind.Equals(UmlPseudoStateKind.Entry) || state.Kind.Equals(UmlPseudoStateKind.Exit))
                 select state).ToList();
 
@@ -46,7 +42,7 @@ namespace Egp.Mda.Transformation.Core.Output
 
             // add initial-states
             IList<UmlPseudoState> initialStates =
-                (from state in Region.Vertices.OfType<UmlPseudoState>()
+                (from state in region.Vertices.OfType<UmlPseudoState>()
                     where state.Kind.Equals(UmlPseudoStateKind.Initial)
                     select state).ToList();
 
@@ -54,7 +50,7 @@ namespace Egp.Mda.Transformation.Core.Output
                 (current, initalState) => current + ("[*] --> " + initalState.Label + Environment.NewLine));
 
             // add initial states
-            IList<UmlState> states = (from state in Region.Vertices.OfType<UmlState>() select state).ToList();
+            IList<UmlState> states = (from state in region.Vertices.OfType<UmlState>() select state).ToList();
 
             foreach (var state in states)
             {
