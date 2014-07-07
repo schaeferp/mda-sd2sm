@@ -26,7 +26,7 @@ namespace Egp.Mda.Transformation.App.Cli
             var plantUmlOutputGenerator = new PlantUmlOutputGenerator();
             var diagramList = plantUmlOutputGenerator.GenerateTextDiagrams(stateMachineModel);
             var writer = new FileWriter();
-            writer.Write(args[1], diagramList.ToString());
+            writer.Write(args[1], string.Concat(diagramList));
         }
     }
 }
