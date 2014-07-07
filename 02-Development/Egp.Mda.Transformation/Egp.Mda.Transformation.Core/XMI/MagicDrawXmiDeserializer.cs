@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using Egp.Mda.Transformation.Domain;
@@ -66,8 +67,9 @@ namespace Egp.Mda.Transformation.Core
         /// </summary>
         /// <param name="document">The input XMI document.</param>
         /// <returns>A mapping containing all contained PackagedElement nodes, with their XMI-Id as a key.</returns>
-        private IDictionary<string, PackagedElement> FetchPackagedElements(XDocument document)
+        private IDictionary<string, PackagedElement> FetchPackagedElements(XContainer document)
         {
+            if (document == null) throw new ArgumentNullException("document");
             var umlModel = document.Descendants(_umlModel);
             var xPackagedElements = umlModel.Descendants(PackagedElementTagName);
             return xPackagedElements.Select(xElement =>
@@ -89,7 +91,7 @@ namespace Egp.Mda.Transformation.Core
         /// </summary>
         /// <param name="node">The root element node to begin searching from.</param>
         /// <returns>A mapping containing all Message nodes being hooked in the given scope, with their XMI-Id as a key.</returns>
-        private IDictionary<string, Message> FetchMessagesFor(XElement node)
+        private IDictionary<string, Message> FetchMessagesFor(XContainer node)
         {
             var xMessages = node.Descendants(MessageTagName);
             return xMessages.Select(xMessage => new Message
@@ -108,7 +110,7 @@ namespace Egp.Mda.Transformation.Core
         /// </summary>
         /// <param name="node">The root element node to begin searching from.</param>
         /// <returns>A mapping containing all Fragment nodes being hooked in the given scope, with their XMI-Id as a key.</returns>
-        private IDictionary<string, Fragment> FetchFragmentsFor(XElement node)
+        private IDictionary<string, Fragment> FetchFragmentsFor(XContainer node)
         {
             var result = new Dictionary<string, Fragment>();
             var xFragments = node.Descendants(FragmentTagName);
@@ -133,7 +135,7 @@ namespace Egp.Mda.Transformation.Core
         /// </summary>
         /// <param name="node">The root element node to begin searching from.</param>
         /// <returns>A mapping containing all OwnedAttribute nodes being hooked in the given scope, with their XMI-Id as a key.</returns>
-        private IDictionary<string, OwnedAttribute> FetchOwnedAttributesFor(XElement node)
+        private IDictionary<string, OwnedAttribute> FetchOwnedAttributesFor(XContainer node)
         {
             var xOwnedAttributes = node.Descendants(OwnedAttributeTagName);
             return xOwnedAttributes.Select(xOwnedAttribute => new OwnedAttribute
@@ -150,7 +152,7 @@ namespace Egp.Mda.Transformation.Core
         /// </summary>
         /// <param name="node">The root element node to begin searching from.</param>
         /// <returns>A mapping containing all Lifeline nodes being hooked in the given scope, with their XMI-Id as a key.</returns>
-        private IDictionary<string, Lifeline> FetchLifelinesFor(XElement node)
+        private IDictionary<string, Lifeline> FetchLifelinesFor(XContainer node)
         {
             var xLifelines = node.Descendants(LifelineTagName);
             return xLifelines.Select(xLifeline => new Lifeline
