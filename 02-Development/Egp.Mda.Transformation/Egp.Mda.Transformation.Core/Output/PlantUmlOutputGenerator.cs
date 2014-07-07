@@ -64,7 +64,7 @@ namespace Egp.Mda.Transformation.Core.Output
                         (origin + " --> " + transition.Target.Label + " : " + transition.Label + Environment.NewLine));
             }
 
-            textDiagram += "}" + Environment.NewLine + "@enduml";
+            textDiagram += "}" + Environment.NewLine;
             return textDiagram;
         }
     }
