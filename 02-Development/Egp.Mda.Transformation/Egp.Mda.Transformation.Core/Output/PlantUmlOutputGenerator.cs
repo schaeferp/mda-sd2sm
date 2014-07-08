@@ -19,14 +19,14 @@ namespace Egp.Mda.Transformation.Core
             var tempDiagramList = stateMachines.Machines
                 .Select(stateMachine => PrintRegion(stateMachine.Region))
                 .ToList();
-            tempDiagramList.Insert(0, "@startuml");
-            tempDiagramList.Add("@enduml");
-            return tempDiagramList;
+            return
+                tempDiagramList.Select(textDiagram => "@startuml" + Environment.NewLine + textDiagram + "@enduml")
+                    .ToList();
         }
 
         private static string PrintRegion(UmlRegion region)
         {
-            _textDiagram = Environment.NewLine + "state " + region.Name + "{" + Environment.NewLine;
+            _textDiagram = Environment.NewLine + "state " + EscapeLabel(region.Name) + "{" + Environment.NewLine;
 
             AddEntryExitStates(region);
 
