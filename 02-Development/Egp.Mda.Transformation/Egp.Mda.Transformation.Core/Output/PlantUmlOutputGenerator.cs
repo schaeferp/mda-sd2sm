@@ -36,7 +36,7 @@ namespace Egp.Mda.Transformation.Core
 
             _textDiagram += "}" + Environment.NewLine;
 
-            AddSubregions(); // stackoverflow exception? not sure why
+            AddSubregions();
 
             return _textDiagram;
         }
@@ -57,12 +57,10 @@ namespace Egp.Mda.Transformation.Core
                     _textDiagram += Environment.NewLine;
                 }
 
-                if (state.IsCompositional)
+                if (!state.IsCompositional) continue;
+                if (!region.Equals(state.Region))
                 {
-                    if (!region.Equals(state.Region))
-                    {
-                        _subRegions.Add(state.Region);
-                    }
+                    _subRegions.Add(state.Region);
                 }
             }
         }
