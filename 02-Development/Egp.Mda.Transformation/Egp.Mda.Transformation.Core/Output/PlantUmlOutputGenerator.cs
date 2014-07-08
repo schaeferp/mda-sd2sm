@@ -10,6 +10,9 @@ namespace Egp.Mda.Transformation.Core
     /// </summary>
     public class PlantUmlOutputGenerator : IOutputGenerator
     {
+        private static string _textDiagram;
+        private static readonly List<UmlRegion> _subRegions = new List<UmlRegion>();
+
         // Interface implementation
         public IList<string> GenerateTextDiagrams(UmlStateMachineModel stateMachines)
         {
@@ -23,10 +26,55 @@ namespace Egp.Mda.Transformation.Core
 
         private static string PrintRegion(UmlRegion region)
         {
-            // names a region
-            var textDiagram = Environment.NewLine + "state " + region.Name + "{";
+            _textDiagram = Environment.NewLine + "state " + region.Name + "{" + Environment.NewLine;
 
-            // add entry- and exit-states
+            AddEntryExitStates(region);
+
+            AddInitialStates(region);
+
+            AddStates(region);
+
+            _textDiagram += "}" + Environment.NewLine;
+
+            //AddSubregions(); // stackoverflow exception? not sure why
+
+            return _textDiagram;
+        }
+
+        private static void AddStates(UmlRegion region)
+        {
+            IList<UmlState> states = (from state in region.Vertices.OfType<UmlState>() select state).ToList();
+
+            foreach (var state in states)
+            {
+                foreach (var transition in state.Outgoing)
+                {
+                    _textDiagram += EscapeString(state.Label) + " --> " + EscapeString(transition.Target.Label) + " : " + EscapeString(transition.Label) +
+                                    Environment.NewLine;
+                }
+
+                if (state.IsCompositional)
+                {
+                    _subRegions.Add(state.Region);
+                }
+            }
+        }
+
+        private static void AddInitialStates(UmlRegion region)
+        {
+            IList<UmlPseudoState> initialStates =
+                (from state in region.Vertices.OfType<UmlPseudoState>()
+                    where state.Kind.Equals(UmlPseudoStateKind.Initial)
+                    select state).ToList();
+
+            foreach (var transition in initialStates.SelectMany(initialState => initialState.Outgoing))
+            {
+                _textDiagram += "[*] --> " + EscapeString(transition.Target.Label) + Environment.NewLine;
+            }
+        }
+
+        private static void AddEntryExitStates(UmlRegion region)
+        {
             IList<UmlPseudoState> pseudoStates = (from state in region.Vertices.OfType<UmlPseudoState>()
                 where (state.Kind.Equals(UmlPseudoStateKind.Entry) || state.Kind.Equals(UmlPseudoStateKind.Exit))
                 select state).ToList();
@@ -35,37 +83,38 @@ namespace Egp.Mda.Transformation.Core
             {
                 if (pseudoState.Kind.Equals(UmlPseudoStateKind.Entry))
                 {
-                    textDiagram += "state " + pseudoState.Label + "<<entrypoint>>" + Environment.NewLine;
+                    _textDiagram += "state " + EscapeString(pseudoState.Label) + "<<entrypoint>>" + Environment.NewLine;
                 }
                 else if (pseudoState.Kind.Equals((UmlPseudoStateKind.Exit)))
                 {
-                    textDiagram += "state " + pseudoState.Label + "<<exitpoint>>" + Environment.NewLine;
+                    _textDiagram += "state " + EscapeString(pseudoState.Label) + "<<exitpoint>>" + Environment.NewLine;
                 }
             }
-
-            // add initial-states
-            IList<UmlPseudoState> initialStates =
-                (from state in region.Vertices.OfType<UmlPseudoState>()
-                    where state.Kind.Equals(UmlPseudoStateKind.Initial)
-                    select state).ToList();
-
-            textDiagram = initialStates.Aggregate(textDiagram,
-                (current, initalState) => current + ("[*] --> " + initalState.Label + Environment.NewLine));
-
-            // add initial states
-            IList<UmlState> states = (from state in region.Vertices.OfType<UmlState>() select state).ToList();
-
-            foreach (var state in states)
+            foreach (var pseudoState in pseudoStates)
             {
-                var origin = state.Label;
-                textDiagram = state.Outgoing.Aggregate(textDiagram,
-                    (current, transition) =>
-                        current +
-                        (origin + " --> " + transition.Target.Label + " : " + transition.Label + Environment.NewLine));
+                if (!pseudoState.Kind.Equals(UmlPseudoStateKind.Entry)) continue;
+                foreach (var transition in pseudoState.Outgoing)
+                {
+                    _textDiagram += EscapeString(pseudoState.Label) + " --> " + EscapeString(transition.Target.Label) + " : " +
+                                    EscapeString(transition.Label) +
+                                    Environment.NewLine;
+                }
             }
+        }
 
-            textDiagram += "}" + Environment.NewLine;
-            return textDiagram;
+        private static void AddSubregions()
+        {
+            foreach (var subRegion in _subRegions)
+            {
+                _textDiagram += PrintRegion(subRegion);
+            }
+        }
+
+        private static string EscapeString(string temp)
+        {
+            temp = temp.Replace(":", "");
+            temp = temp.Replace("-", "");
+            return temp;
         }
     }
 }
