@@ -36,7 +36,7 @@ namespace Egp.Mda.Transformation.Core
 
             _textDiagram += "}" + Environment.NewLine;
 
-            //AddSubregions(); // stackoverflow exception? not sure why
+            AddSubregions(); // stackoverflow exception? not sure why
 
             return _textDiagram;
         }
@@ -49,13 +49,20 @@ namespace Egp.Mda.Transformation.Core
             {
                 foreach (var transition in state.Outgoing)
                 {
-                    _textDiagram += EscapeString(state.Label) + " --> " + EscapeString(transition.Target.Label) + " : " + EscapeString(transition.Label) +
-                                    Environment.NewLine;
+                    _textDiagram += EscapeState(state.Label) + " --> " + EscapeState(transition.Target.Label);
+                    if (EscapeLabel(transition.Label) != "")
+                    {
+                        _textDiagram += " : " + EscapeLabel(transition.Label);
+                    }
+                    _textDiagram += Environment.NewLine;
                 }
 
                 if (state.IsCompositional)
                 {
-                    _subRegions.Add(state.Region);
+                    if (!region.Equals(state.Region))
+                    {
+                        _subRegions.Add(state.Region);
+                    }
                 }
             }
         }
@@ -69,7 +76,7 @@ namespace Egp.Mda.Transformation.Core
 
             foreach (var transition in initialStates.SelectMany(initialState => initialState.Outgoing))
             {
-                _textDiagram += "[*] --> " + EscapeString(transition.Target.Label) + Environment.NewLine;
+                _textDiagram += "[*] --> " + EscapeState(transition.Target.Label) + Environment.NewLine;
             }
         }
 
@@ -81,39 +88,58 @@ namespace Egp.Mda.Transformation.Core
 
             foreach (var pseudoState in pseudoStates)
             {
+                var diagramPart = "";
                 if (pseudoState.Kind.Equals(UmlPseudoStateKind.Entry))
                 {
-                    _textDiagram += "state " + EscapeString(pseudoState.Label) + "<<entrypoint>>" + Environment.NewLine;
+                    diagramPart = "state " + pseudoState.GetHashCode() + " <<entrypoint>>" + Environment.NewLine;
                 }
                 else if (pseudoState.Kind.Equals((UmlPseudoStateKind.Exit)))
                 {
-                    _textDiagram += "state " + EscapeString(pseudoState.Label) + "<<exitpoint>>" + Environment.NewLine;
+                    diagramPart += "state " + EscapeState(pseudoState.Label) + " <<exitpoint>>" + Environment.NewLine;
                 }
+                _textDiagram += diagramPart;
             }
             foreach (var pseudoState in pseudoStates)
             {
                 if (!pseudoState.Kind.Equals(UmlPseudoStateKind.Entry)) continue;
                 foreach (var transition in pseudoState.Outgoing)
                 {
-                    _textDiagram += EscapeString(pseudoState.Label) + " --> " + EscapeString(transition.Target.Label) + " : " +
-                                    EscapeString(transition.Label) +
-                                    Environment.NewLine;
+                    _textDiagram += pseudoState.GetHashCode() + " --> " + EscapeState(transition.Target.Label);
+                    if (EscapeLabel(transition.Label) != "")
+                    {
+                        _textDiagram += " : " + EscapeLabel(transition.Label);
+                    }
+                    _textDiagram += Environment.NewLine;
                 }
             }
         }
 
         private static void AddSubregions()
         {
-            foreach (var subRegion in _subRegions)
+            while (_subRegions.Any())
             {
-                _textDiagram += PrintRegion(subRegion);
+                var tempRegion = _subRegions.First();
+                _subRegions.Remove(tempRegion);
+                _textDiagram += PrintRegion(tempRegion);
             }
         }
 
-        private static string EscapeString(string temp)
+        private static string EscapeLabel(string temp)
         {
             temp = temp.Replace(":", "");
             temp = temp.Replace("-", "");
+            temp = temp.Replace(" ", "");
+            return temp;
+        }
+
+        private static string EscapeState(string temp)
+        {
+            temp = EscapeLabel(temp);
+            temp = temp.Replace("/", "");
+            temp = temp.Replace(".", "");
+            temp = temp.Replace(";", "");
+            temp = temp.Replace(Environment.NewLine, "");
+
             return temp;
         }
     }
