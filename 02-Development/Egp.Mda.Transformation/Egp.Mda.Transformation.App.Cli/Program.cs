@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Egp.Mda.Transformation.Core;
 
 namespace Egp.Mda.Transformation.App.Cli
@@ -26,7 +27,12 @@ namespace Egp.Mda.Transformation.App.Cli
             var plantUmlOutputGenerator = new PlantUmlOutputGenerator();
             var diagramList = plantUmlOutputGenerator.GenerateTextDiagrams(stateMachineModel);
             var writer = new FileWriter();
-            writer.Write(args[1], string.Concat(diagramList));
+            var i = 1;
+            foreach (var diagram in diagramList)
+            {
+                writer.Write(args[1] + i + ".txt", diagram);
+                i++;
+            }
         }
     }
 }
