@@ -158,7 +158,7 @@ namespace Egp.Mda.Transformation.Core
         private static List<CallGroup> ClassifyBehaviors(IEnumerable<IList<MessageTriple>> behaviors)
         {
             return (
-                from behavior in behaviors
+                from behavior in behaviors.Where(b => b.Count > 0)
                 group behavior by new
                 {
                     behavior.First().Target,

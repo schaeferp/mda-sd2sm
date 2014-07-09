@@ -85,6 +85,8 @@ namespace Egp.Mda.Transformation.Core
                 Action = "",
                 Return = "return " + transition.InMessageTriple.Return
             });
+
+            RegisterActivityMessages(activity, transition.OutMessages);
         }
 
         /// <summary>
@@ -103,8 +105,6 @@ namespace Egp.Mda.Transformation.Core
                 Action = transition.InMessageTriple.Operation,
                 Return = ""
             });
-
-            RegisterActivityMessages(activity, transition.OutMessages);
         }
 
         /// <summary>
