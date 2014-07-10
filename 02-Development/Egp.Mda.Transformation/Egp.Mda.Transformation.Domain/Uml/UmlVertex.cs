@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Egp.Mda.Transformation.Domain
 {
@@ -7,6 +8,12 @@ namespace Egp.Mda.Transformation.Domain
         private IList<UmlTransition> _outgoing;
 
         public string Label { get; set; }
+
+        public string GetName()
+        {
+            var index = Label.IndexOf(Environment.NewLine, System.StringComparison.Ordinal);
+            return this.Label.Substring(0, index);
+        }
 
         public IList<UmlTransition> Outgoing
         {
