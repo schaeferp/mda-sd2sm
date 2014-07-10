@@ -9,16 +9,16 @@ namespace Egp.Mda.Transformation.Domain
 
         public string Label { get; set; }
 
-        public string GetName()
-        {
-            if (!Label.Contains(Environment.NewLine)) return Label;
-            var index = Label.IndexOf(Environment.NewLine, System.StringComparison.Ordinal);
-            return Label.Substring(0, index);
-        }
-
         public IList<UmlTransition> Outgoing
         {
             get { return _outgoing ?? (_outgoing = new List<UmlTransition>()); }
+        }
+
+        public string GetName()
+        {
+            if (!Label.Contains(Environment.NewLine)) return Label;
+            var index = Label.IndexOf(Environment.NewLine, StringComparison.Ordinal);
+            return Label.Substring(0, index);
         }
     }
 

@@ -62,7 +62,11 @@ namespace Egp.Mda.Transformation.Core
                         var i = 0;
                         foreach (var line in state.Label.Split(Environment.NewLine.ToCharArray()))
                         {
-                            if (i == 0) continue;
+                            if (i == 0 || line.Equals(""))
+                            {
+                                i++;
+                                continue;
+                            }
                             _textDiagram += EscapeState(state.GetName()) + " : " + line + Environment.NewLine;
                             i++;
                         }
