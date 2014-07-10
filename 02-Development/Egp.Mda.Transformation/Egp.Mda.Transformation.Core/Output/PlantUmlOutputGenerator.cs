@@ -26,7 +26,7 @@ namespace Egp.Mda.Transformation.Core
 
         private static string PrintRegion(UmlRegion region)
         {
-            _textDiagram = Environment.NewLine + "state " + EscapeLabel(region.Name) + "{" + Environment.NewLine;
+            _textDiagram = Environment.NewLine + "state stateMachine" + EscapeLabel(region.Name) + "{" + Environment.NewLine;
 
             AddEntryExitStates(region);
 
@@ -44,15 +44,20 @@ namespace Egp.Mda.Transformation.Core
         private static void AddStates(UmlRegion region)
         {
             IList<UmlState> states = (from state in region.Vertices.OfType<UmlState>() select state).ToList();
-
+            string temp = "";
             foreach (var state in states)
             {
                 foreach (var transition in state.Outgoing)
                 {
-                    _textDiagram += EscapeState(state.Label) + " --> " + EscapeState(transition.Target.Label);
+                    temp += EscapeState(state.GetName()) + " --> " + EscapeState(transition.Target.GetName());
+                    
                     if (EscapeLabel(transition.Label) != "")
                     {
-                        _textDiagram += " : " + EscapeLabel(transition.Label);
+                        temp += " : ";
+                        foreach (var line in transition.Label.Split(Environment.NewLine.ToCharArray()))
+                        {
+                            _textDiagram += temp + line + Environment.NewLine;
+                        }
                     }
                     _textDiagram += Environment.NewLine;
                 }
@@ -74,7 +79,7 @@ namespace Egp.Mda.Transformation.Core
 
             foreach (var transition in initialStates.SelectMany(initialState => initialState.Outgoing))
             {
-                _textDiagram += "[*] --> " + EscapeState(transition.Target.Label) + Environment.NewLine;
+                _textDiagram += "[*] --> " + EscapeState(transition.Target.GetName()) + Environment.NewLine;
             }
         }
 
@@ -102,7 +107,7 @@ namespace Egp.Mda.Transformation.Core
                 if (!pseudoState.Kind.Equals(UmlPseudoStateKind.Entry)) continue;
                 foreach (var transition in pseudoState.Outgoing)
                 {
-                    _textDiagram += pseudoState.GetHashCode() + " --> " + EscapeState(transition.Target.Label);
+                    _textDiagram += pseudoState.GetHashCode() + " --> " + EscapeState(transition.Target.GetName());
                     if (EscapeLabel(transition.Label) != "")
                     {
                         _textDiagram += " : " + EscapeLabel(transition.Label);
