@@ -23,6 +23,21 @@ namespace Egp.Mda.Transformation.Domain
         public string Name { get; set; }
 
         /// <summary>
+        /// This Message's name in pretty style, which means that a colon as prefix is removed.
+        /// </summary>
+        public string PrettyName
+        {
+            get
+            {
+                if (Name.StartsWith(":"))
+                {
+                    return Name.Substring(1).Trim();
+                }
+                return Name;
+            }
+        }
+
+        /// <summary>
         ///     This Message's receive event.
         /// </summary>
         public string ReceiveEvent { get; set; }
