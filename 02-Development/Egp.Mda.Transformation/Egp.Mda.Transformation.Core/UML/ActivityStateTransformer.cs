@@ -17,10 +17,10 @@ namespace Egp.Mda.Transformation.Core
         private const string AssignLabel = "{0} := {1}.{2}";
         private const string CheckLabel = "{0} = {1}";
 
+        private static int _exitCount = 0;
+        private static int _stateCount = 0;
         private readonly string _activityName;
         private readonly UmlRegion _region;
-        private int _exitCount;
-        private int _stateCount;
 
         /// <summary>
         ///     Creates a new transformer instance and computes the transformation.
@@ -30,8 +30,6 @@ namespace Egp.Mda.Transformation.Core
         /// <param name="behaviors">A list of behaviors.</param>
         public ActivityStateTransformer(string activityName, IList<IList<MessageTriple>> behaviors)
         {
-            _exitCount = 0;
-            _stateCount = 0;
             _activityName = activityName;
             _region = new UmlRegion(_activityName);
 
