@@ -26,7 +26,8 @@ namespace Egp.Mda.Transformation.Core
 
         private static string PrintRegion(UmlRegion region)
         {
-            _textDiagram = Environment.NewLine + "state stateMachine" + EscapeLabel(region.Name) + "{" + Environment.NewLine;
+            _textDiagram = Environment.NewLine + "state stateMachine" + EscapeLabel(region.Name) + "{" +
+                           Environment.NewLine;
 
             AddEntryExitStates(region);
 
@@ -44,19 +45,26 @@ namespace Egp.Mda.Transformation.Core
         private static void AddStates(UmlRegion region)
         {
             IList<UmlState> states = (from state in region.Vertices.OfType<UmlState>() select state).ToList();
-            string temp = "";
             foreach (var state in states)
             {
                 foreach (var transition in state.Outgoing)
                 {
-                    temp += EscapeState(state.GetName()) + " --> " + EscapeState(transition.Target.GetName());
-                    
+                    _textDiagram += EscapeState(state.GetName()) + " --> " + EscapeState(transition.Target.GetName());
+
                     if (EscapeLabel(transition.Label) != "")
                     {
-                        temp += " : ";
-                        foreach (var line in transition.Label.Split(Environment.NewLine.ToCharArray()))
+                        _textDiagram += " : " + EscapeLabel(transition.Label);
+                    }
+                    _textDiagram += Environment.NewLine;
+
+                    if (state.Label.Contains(Environment.NewLine))
+                    {
+                        var i = 0;
+                        foreach (var line in state.Label.Split(Environment.NewLine.ToCharArray()))
                         {
-                            _textDiagram += temp + line + Environment.NewLine;
+                            if (i == 0) continue;
+                            _textDiagram += EscapeState(state.GetName()) + " : " + line + Environment.NewLine;
+                            i++;
                         }
                     }
                     _textDiagram += Environment.NewLine;
