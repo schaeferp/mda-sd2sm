@@ -161,13 +161,13 @@ namespace Egp.Mda.Transformation.Core
                 from behavior in behaviors.Where(b => b.Count > 0)
                 group behavior by new
                 {
-                    behavior.First().Target,
+                    behavior.First().Target.Name,
                     behavior.First().Operation
                 }
                 into callGroup
                 select new CallGroup
                 {
-                    Target = callGroup.Key.Target,
+                    Target = callGroup.Key.Name,
                     Operation = callGroup.Key.Operation,
                     Returns = (
                         from cg in callGroup
@@ -206,7 +206,7 @@ namespace Egp.Mda.Transformation.Core
         ///     Branches a call group indeterministically.
         /// </summary>
         /// <param name="origin">The source state or pseudo state.</param>
-        /// <param name="callGroup">Several call groups.</param>
+        /// <param name="callGroups">Several call groups.</param>
         private void CreateIndeterministicBranch(UmlVertex origin, IEnumerable<CallGroup> callGroups)
         {
             Console.WriteLine("WARNING: Indeterministic Transition in activity `{0}`!", _activityName);
@@ -226,7 +226,7 @@ namespace Egp.Mda.Transformation.Core
 
         private class CallGroup
         {
-            public IParticipant Target { get; set; }
+            public string Target { get; set; }
             public string Operation { get; set; }
             public IList<ReturnGroup> Returns { get; set; }
         }
