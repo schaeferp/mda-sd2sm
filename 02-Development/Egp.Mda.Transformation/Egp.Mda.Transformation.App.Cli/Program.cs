@@ -25,14 +25,11 @@ namespace Egp.Mda.Transformation.App.Cli
             var stateMachineModel = stateMachineService.From(ioAutomaton);
 
             var plantUmlOutputGenerator = new PlantUmlOutputGenerator();
-            var diagramList = plantUmlOutputGenerator.GenerateTextDiagrams(stateMachineModel);
+            var diagrams = plantUmlOutputGenerator.GenerateTextDiagrams(stateMachineModel);
+
             var writer = new FileWriter();
-            var i = 1;
-            foreach (var diagram in diagramList)
-            {
-                writer.Write(args[1] + i + ".txt", diagram);
-                i++;
-            }
+            for (int i = 0; i < diagrams.Count; i++) 
+                writer.Write(args[1] + (i + 1) + ".txt", diagrams[i]);
         }
     }
 }
