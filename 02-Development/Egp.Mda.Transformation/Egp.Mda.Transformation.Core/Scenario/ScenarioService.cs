@@ -87,7 +87,7 @@ namespace Egp.Mda.Transformation.Core
                 ScenarioOperationInvocation lastInvocation;
                 var lastInvocationExists = lastInvocationPerParticipant.TryGetValue(participant, out lastInvocation);
 
-                if (lastInvocationExists && messageIsReply && participantIsSender) lastInvocation.Return = message.Name;
+                if (lastInvocationExists && messageIsReply && participantIsSender) lastInvocation.Return = message.PrettyName;
 
                 if (participantIsSender)
                 {
@@ -141,7 +141,7 @@ namespace Egp.Mda.Transformation.Core
                 lastInvocation = newInvocation;
             }
 
-            lastInvocation.ScenarioOperation = CreateOrLookOperation(participant, message.Name);
+            lastInvocation.ScenarioOperation = CreateOrLookOperation(participant, message.PrettyName);
             scenario.Invocations.Add(lastInvocation);
             return lastInvocation;
         }
@@ -160,7 +160,7 @@ namespace Egp.Mda.Transformation.Core
             Scenario scenario)
         {
             var preState = ScenarioStateInvariant.CreateAnonymous();
-            var operation = CreateOrLookOperation(participant, message.Name);
+            var operation = CreateOrLookOperation(participant, message.PrettyName);
             var invocation = new ScenarioOperationInvocation
             {
                 PreScenarioStateInvariant = preState,
