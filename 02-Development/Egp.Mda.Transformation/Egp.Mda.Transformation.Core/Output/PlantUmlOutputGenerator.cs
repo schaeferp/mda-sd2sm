@@ -57,22 +57,22 @@ namespace Egp.Mda.Transformation.Core
                     }
                     _textDiagram += Environment.NewLine;
 
-                    if (state.Label.Contains(Environment.NewLine))
-                    {
-                        var i = 0;
-                        foreach (var line in state.Label.Split(Environment.NewLine.ToCharArray()))
-                        {
-                            if (i == 0 || line.Equals(""))
-                            {
-                                i++;
-                                continue;
-                            }
-                            _textDiagram += EscapeState(state.GetName()) + " : " + line + Environment.NewLine;
-                            i++;
-                        }
-                    }
-                    _textDiagram += Environment.NewLine;
                 }
+                if (state.Label.Contains(Environment.NewLine))
+                {
+                    var i = 0;
+                    foreach (var line in state.Label.Split(Environment.NewLine.ToCharArray()))
+                    {
+                        if (i == 0 || line.Equals(""))
+                        {
+                            i++;
+                            continue;
+                        }
+                        _textDiagram += EscapeState(state.GetName()) + " : " + line + Environment.NewLine;
+                        i++;
+                    }
+                }
+                _textDiagram += Environment.NewLine;
 
                 if (!state.IsCompositional) continue;
                 if (!region.Equals(state.Region))
