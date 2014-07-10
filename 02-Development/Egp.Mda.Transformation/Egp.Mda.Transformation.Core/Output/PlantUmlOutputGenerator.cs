@@ -24,6 +24,11 @@ namespace Egp.Mda.Transformation.Core
                     .ToList();
         }
 
+        /// <summary>
+        ///     Prints a given region
+        /// </summary>
+        /// <param name="region"></param>
+        /// <returns></returns>
         private static string PrintRegion(UmlRegion region)
         {
             _textDiagram = Environment.NewLine + "state stateMachine" + EscapeLabel(region.Name) + "{" +
@@ -42,6 +47,10 @@ namespace Egp.Mda.Transformation.Core
             return _textDiagram;
         }
 
+        /// <summary>
+        ///     Adds all states to the given region
+        /// </summary>
+        /// <param name="region"></param>
         private static void AddStates(UmlRegion region)
         {
             IList<UmlState> states = (from state in region.Vertices.OfType<UmlState>() select state).ToList();
@@ -56,7 +65,6 @@ namespace Egp.Mda.Transformation.Core
                         _textDiagram += " : " + EscapeLabel(transition.Label);
                     }
                     _textDiagram += Environment.NewLine;
-
                 }
                 if (state.Label.Contains(Environment.NewLine))
                 {
@@ -82,6 +90,10 @@ namespace Egp.Mda.Transformation.Core
             }
         }
 
+        /// <summary>
+        ///     adds initial states to the current region
+        /// </summary>
+        /// <param name="region"></param>
         private static void AddInitialStates(UmlRegion region)
         {
             IList<UmlPseudoState> initialStates =
@@ -95,6 +107,10 @@ namespace Egp.Mda.Transformation.Core
             }
         }
 
+        /// <summary>
+        ///     adds entry and exit states to the current region
+        /// </summary>
+        /// <param name="region"></param>
         private static void AddEntryExitStates(UmlRegion region)
         {
             IList<UmlPseudoState> pseudoStates = (from state in region.Vertices.OfType<UmlPseudoState>()
@@ -129,6 +145,9 @@ namespace Egp.Mda.Transformation.Core
             }
         }
 
+        /// <summary>
+        ///     adds a subregion to the current region
+        /// </summary>
         private static void AddSubregions()
         {
             while (_subRegions.Any())
@@ -139,6 +158,11 @@ namespace Egp.Mda.Transformation.Core
             }
         }
 
+        /// <summary>
+        ///     removes forbidden chars
+        /// </summary>
+        /// <param name="temp"></param>
+        /// <returns></returns>
         private static string EscapeLabel(string temp)
         {
             temp = temp.Replace(":", "");
@@ -147,6 +171,11 @@ namespace Egp.Mda.Transformation.Core
             return temp;
         }
 
+        /// <summary>
+        ///     removes forbidden chars
+        /// </summary>
+        /// <param name="temp"></param>
+        /// <returns></returns>
         private static string EscapeState(string temp)
         {
             temp = EscapeLabel(temp);
