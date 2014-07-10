@@ -11,8 +11,9 @@ namespace Egp.Mda.Transformation.Domain
 
         public string GetName()
         {
+            if (!Label.Contains(Environment.NewLine)) return Label;
             var index = Label.IndexOf(Environment.NewLine, System.StringComparison.Ordinal);
-            return this.Label.Substring(0, index);
+            return Label.Substring(0, index);
         }
 
         public IList<UmlTransition> Outgoing
